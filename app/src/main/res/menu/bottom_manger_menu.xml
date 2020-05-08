@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/bottom_menu_store"
+        android:icon="@drawable/dianpu"
+        android:title="店铺管理"
+        />
+    <item android:id="@+id/bottom_menu_score"
+        android:icon="@drawable/pingfen"
+        android:title="评分标准"
+        />
+    <item android:id="@+id/bottom_menu_mgr_about"
+        android:icon="@drawable/about"
+        android:title="我的"
+        />
+</menu>
