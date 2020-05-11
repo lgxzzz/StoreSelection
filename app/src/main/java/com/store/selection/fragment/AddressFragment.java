@@ -17,12 +17,6 @@ import com.store.selection.data.DBManger;
 
 public class AddressFragment extends Fragment {
 
-    //个人信息
-    TextView mUserID;
-    TextView mUserName;
-    TextView mUserTel;
-    TextView mUserMail;
-    Button mUpdateBtn;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,26 +37,10 @@ public class AddressFragment extends Fragment {
     }
 
     public void initView(View view){
-        mUserID = view.findViewById(R.id.user_id);
-        mUserName = view.findViewById(R.id.user_name);
-        mUserTel = view.findViewById(R.id.user_tel);
-        mUserMail = view.findViewById(R.id.user_mail);
-        mUpdateBtn = view.findViewById(R.id.user_update_btn);
 
     };
 
     public void initData() {
-        User user = DBManger.getInstance(getContext()).mUser;
-        mUserID.setText(user.getUserId());
-        mUserName.setText(user.getUserName());
-        mUserMail.setText(user.getMail());
-        mUserTel.setText(user.getTelephone());
-        mUpdateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 

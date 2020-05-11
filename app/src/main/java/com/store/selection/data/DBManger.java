@@ -7,13 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 
+import com.store.selection.bean.Evaluate;
+import com.store.selection.bean.Store;
 import com.store.selection.bean.User;
+import com.store.selection.constant.Constant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -270,7 +274,103 @@ public class DBManger {
         return mUsers;
     }
 
+    //获取店铺一级
+    public List<Store> getStoreByLevelFirst(){
+        List<Store> mStores = new ArrayList<>();
+        HashMap<String, List<Store>> mTempMap = new HashMap<>();
+        try{
 
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_STORE,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
+                String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
+                String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
+                Store store = new Store();
+                store.setLevel_First(STORE_LEVLE_1);
+                store.setLevel_Sec(STORE_LEVLE_2);
+                store.setLevel_Third(STORE_LEVLE_3);
+                if (!mTempMap.containsKey(STORE_LEVLE_1)){
+                    List<Store> stores = new ArrayList<>();
+                    stores.add(store);
+                    mTempMap.put(STORE_LEVLE_1,stores);
+                }else{
+                    List<Store> stores = mTempMap.get(STORE_LEVLE_1);
+                    stores.add(store);
+                    mTempMap.put(STORE_LEVLE_1,stores);
+                }
+            }
+
+            Iterator<Map.Entry<String, List<Store>>> iter = mTempMap.entrySet()
+                    .iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String lv1 = (String)entry.getKey();
+                List<Store> temps= (List<Store>)entry.getValue();
+                Store store = new Store();
+                store.setLevel_First(lv1);
+                for (int i=0;i<temps.size();i++){
+                    Store temp = temps.get(i);
+                    store.getLevelSecTitle().add(temp.getLevel_Sec());
+                    store.getLevelThirdTitle().add(temp.getLevel_Third());
+                }
+                mStores.add(store);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mStores;
+    }
+
+    //获取一级评价标准
+    public List<Evaluate> getEvaluteByLevelFirst(){
+        List<Evaluate> mEvalutes = new ArrayList<>();
+        HashMap<String, List<Evaluate>> mTempMap = new HashMap<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_EVALUTE,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
+                String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
+                String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+                Evaluate evaluate = new Evaluate();
+                evaluate.setWeight(WEIGHT);
+                evaluate.setLevel_First(EVA_LEVLE_1);
+                evaluate.setLevel_Sec(EVA_LEVLE_2);
+                evaluate.setLevel_Third(EVA_LEVLE_3);
+                if (!mTempMap.containsKey(EVA_LEVLE_1)){
+                    List<Evaluate> evaluates = new ArrayList<>();
+                    evaluates.add(evaluate);
+                    mTempMap.put(EVA_LEVLE_1,evaluates);
+                }else{
+                    List<Evaluate> evaluates = mTempMap.get(EVA_LEVLE_1);
+                    evaluates.add(evaluate);
+                    mTempMap.put(EVA_LEVLE_1,evaluates);
+                }
+            }
+
+            Iterator<Map.Entry<String, List<Evaluate>>> iter = mTempMap.entrySet()
+                    .iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                String lv1 = (String)entry.getKey();
+                List<Evaluate> temps= (List<Evaluate>)entry.getValue();
+                Evaluate evaluate = new Evaluate();
+                evaluate.setLevel_First(lv1);
+                for (int i=0;i<temps.size();i++){
+                    Evaluate temp = temps.get(i);
+                    evaluate.getLevelSecTitle().add(temp.getLevel_Sec());
+                    evaluate.getLevelThirdTitle().add(temp.getLevel_Third());
+                }
+                mEvalutes.add(evaluate);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mEvalutes;
+    }
 
     public interface IListener{
         public void onSuccess();

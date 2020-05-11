@@ -12,6 +12,8 @@ import java.util.List;
  * */
 public class DataBase {
 
+
+
     //默认的生成的评价因素
     public static List<EvaluateIndex> getDefaultEvaluateIndexs(){
 
@@ -186,7 +188,6 @@ public class DataBase {
 
         return mIndexs;
     }
-
 
     //默认生成的门店类别
     public void getDefaultAllStore(){

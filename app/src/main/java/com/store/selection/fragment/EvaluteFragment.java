@@ -7,35 +7,34 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.store.selection.R;
+import com.store.selection.adapter.EvaluteAdapter;
 import com.store.selection.adapter.StoreAdapter;
+import com.store.selection.bean.Evaluate;
 import com.store.selection.bean.Store;
-import com.store.selection.bean.User;
 import com.store.selection.data.DBManger;
 
 import java.util.List;
 
 
-public class StoreFragment extends Fragment {
+public class EvaluteFragment extends Fragment {
 
     ListView mListView;
 
-    StoreAdapter mAdapter;
+    EvaluteAdapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragement_store, container, false);
+        View view =  inflater.inflate(R.layout.fragement_evalute, container, false);
         initView(view);
 
         return view;
     }
 
-    public static StoreFragment getInstance() {
-        return new StoreFragment();
+    public static EvaluteFragment getInstance() {
+        return new EvaluteFragment();
     }
 
     @Override
@@ -49,8 +48,8 @@ public class StoreFragment extends Fragment {
     };
 
     public void initData() {
-        List<Store> mStores = DBManger.getInstance(getContext()).getStoreByLevelFirst();
-        mAdapter = new StoreAdapter(getContext(),mStores);
+        List<Evaluate> mEvalutes = DBManger.getInstance(getContext()).getEvaluteByLevelFirst();
+        mAdapter = new EvaluteAdapter(getContext(),mEvalutes);
         mListView.setAdapter(mAdapter);
     }
 

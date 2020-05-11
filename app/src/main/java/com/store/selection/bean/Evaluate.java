@@ -3,14 +3,37 @@ package com.store.selection.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Store {
-    String Level_First;//一级分类
-    String Level_Sec;//二级分类
-    String Level_Third;//三级分类
+public class Evaluate {
+    //指数参数id
+    public String evalute_id;
+    //权重
+    public String weight = "0";
+    //一级分类
+    String Level_First;
+    //二级分类
+    String Level_Sec;
+    //三级分类
+    String Level_Third;
 
     List<String> levelSecTitle = new ArrayList<>();
 
     List<String> levelThirdTitle = new ArrayList<>();
+
+    public String getEvalute_id() {
+        return evalute_id;
+    }
+
+    public void setEvalute_id(String evalute_id) {
+        this.evalute_id = evalute_id;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
 
     public String getLevel_First() {
         return Level_First;
