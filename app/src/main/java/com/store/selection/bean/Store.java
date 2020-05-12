@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Store {
+    String STORE_ID;
     String Level_First;//一级分类
     String Level_Sec;//二级分类
     String Level_Third;//三级分类
@@ -11,6 +12,14 @@ public class Store {
     List<String> levelSecTitle = new ArrayList<>();
 
     List<String> levelThirdTitle = new ArrayList<>();
+
+    public String getSTORE_ID() {
+        return STORE_ID;
+    }
+
+    public void setSTORE_ID(String STORE_ID) {
+        this.STORE_ID = STORE_ID;
+    }
 
     public String getLevel_First() {
         return Level_First;

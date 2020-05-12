@@ -144,7 +144,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="生成报告"
+        android:text="确定"
         android:id="@+id/create_report_btn"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"

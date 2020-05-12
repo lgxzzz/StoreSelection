@@ -11,6 +11,7 @@ import com.store.selection.bean.Evaluate;
 import com.store.selection.bean.Store;
 import com.store.selection.bean.User;
 import com.store.selection.constant.Constant;
+import com.store.selection.util.SharedPreferenceUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ public class DBManger {
     private Context mContext;
     private SQLiteDbHelper mDBHelper;
     public User mUser;
+    public DataBase mDataBase;
     public static  DBManger instance;
 
     public static DBManger getInstance(Context mContext){
@@ -37,7 +39,10 @@ public class DBManger {
     public DBManger(final Context mContext){
         this.mContext = mContext;
         mDBHelper = new SQLiteDbHelper(mContext);
-
+        mDataBase = new DataBase();
+        if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
+            initDefaultData();
+        }
     }
 
 
@@ -370,6 +375,50 @@ public class DBManger {
             e.printStackTrace();
         }
         return mEvalutes;
+    }
+
+    //添加店铺信息
+    public void insertStore(Store store){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("STORE_ID",store.getSTORE_ID());
+            values.put("STORE_LEVLE_1",store.getLevel_First());
+            values.put("STORE_LEVLE_2",store.getLevel_Sec());
+            values.put("STORE_LEVLE_3",store.getLevel_Third());
+            long code = db.insert(SQLiteDbHelper.TAB_STORE,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //添加评价标准
+    public void insertEvalute(Evaluate evaluate){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("EVA_ID",evaluate.getEvalute_id());
+            values.put("WEIGHT",evaluate.getWeight());
+            values.put("EVA_LEVLE_1",evaluate.getLevel_Sec());
+            values.put("EVA_LEVLE_2",evaluate.getLevel_Third());
+            values.put("EVA_LEVLE_3",evaluate.getLevel_Third());
+            long code = db.insert(SQLiteDbHelper.TAB_EVALUTE,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void initDefaultData(){
+        List<Store> mStores = mDataBase.getDefaultAllStore();
+        for (int i=0;i<mStores.size();i++){
+            insertStore(mStores.get(i));
+        }
+        List<Evaluate> mEvalutes = mDataBase.getDefaultEvalute();
+        for (int i=0;i<mEvalutes.size();i++){
+            insertEvalute(mEvalutes.get(i));
+        }
     }
 
     public interface IListener{

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.store.selection.util.SharedPreferenceUtil;
+
 
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 
@@ -33,6 +35,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        SharedPreferenceUtil.setFirstTimeUse(true,context);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_USER);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_STORE);
         onCreate(db);
