@@ -70,14 +70,14 @@
             android:text="周边范围:"
             android:textSize="20dp" />
 
-        <EditText
+        <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/village_near_ed"
+            android:id="@+id/village_near_sp"
             android:layout_weight="1"
             >
 
-        </EditText>
+        </Spinner>
     </LinearLayout>
     <com.amap.api.maps.MapView
         android:id="@+id/map"

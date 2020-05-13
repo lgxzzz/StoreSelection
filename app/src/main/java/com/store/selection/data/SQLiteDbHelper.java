@@ -19,6 +19,10 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
     public static final String TAB_STORE = "Store";
     //评价表
     public static final String TAB_EVALUTE = "Evalute";
+    //小区表
+    public static final String TAB_VILLAGE = "Evalute";
+    //报告表
+    public static final String TAB_REPORT = "Report";
 
     Context context;
     public SQLiteDbHelper(Context context){
@@ -31,6 +35,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
         createTableUser(db);
         createTableStore(db);
         createTableEvalute(db);
+        createTableVillage(db);
     }
 
     @Override
@@ -69,5 +74,14 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
                 "EVA_LEVLE_1 varchar(20), " +
                 "EVA_LEVLE_2 varchar(20), " +
                 "EVA_LEVLE_3 varchar(20))");
+    }
+
+    //创建小区表
+    public void createTableVillage(SQLiteDatabase db){
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_EVALUTE +
+                "(Village_ID varchar(20) primary key, " +
+                "Village_Name varchar(20), " +
+                "Village_Evalute text, " +
+                "Village_Address varchar(20))");
     }
 }

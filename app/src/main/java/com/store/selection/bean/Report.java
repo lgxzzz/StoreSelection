@@ -10,6 +10,4 @@ public class Report {
     //报告日期
     String Report_Time;
 
-    //指标参数
-    List<Evaluate> mEvalutes = new ArrayList<>();
 }

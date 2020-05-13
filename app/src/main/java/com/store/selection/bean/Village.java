@@ -10,5 +10,12 @@ public class Village {
     String Village_Name;
     //小区地址
     String Village_Address;
+    //指标集合
+    String Village_Evalute;
+    //指标参数
+    List<Evaluate> mEvalutes = new ArrayList<>();
 
+    public void insertEvalute(Evaluate evaluate){
+
+    }
 }

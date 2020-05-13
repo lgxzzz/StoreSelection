@@ -13,8 +13,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,11 +59,14 @@ public class AddressFragment extends Fragment {
     private static boolean isLoaded = false;
 
     private EditText mVillageAddresEd;
+    private Spinner mVillageNearSp;
     private Button mStoreDetailBtn;
 
     private MapView mMapView = null;
     private AMap mAMap;
     private Marker mLocationMarker; // 选择的点
+
+    List<String> mNearDisData =new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -126,6 +133,16 @@ public class AddressFragment extends Fragment {
                 getContext().startActivity(intent);
             }
         });
+
+        mVillageNearSp = view.findViewById(R.id.village_type_sp);
+
+        mNearDisData.add("500M");
+        mNearDisData.add("1KM");
+        mNearDisData.add("3KM");
+
+        SpinnerAdapter adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,mNearDisData);
+        mVillageNearSp.setAdapter(adapter);
+
     };
 
     //增加图标
