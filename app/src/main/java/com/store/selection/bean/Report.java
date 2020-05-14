@@ -10,4 +10,6 @@ public class Report {
     //报告日期
     String Report_Time;
 
+    //小区信息
+    Village village;
 }

@@ -1,18 +1,20 @@
 package com.store.selection.bean;
 
+import com.contrarywind.interfaces.IPickerViewData;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Store implements Serializable{
+public class Store implements Serializable, IPickerViewData {
     String STORE_ID;
     String Level_First;//一级分类
     String Level_Sec;//二级分类
     String Level_Third;//三级分类
 
-    List<String> levelSecTitle = new ArrayList<>();
+    ArrayList<String> levelSecTitle = new ArrayList<>();
 
-    List<String> levelThirdTitle = new ArrayList<>();
+    ArrayList<String> levelThirdTitle = new ArrayList<>();
 
     public String getSTORE_ID() {
         return STORE_ID;
@@ -46,11 +48,11 @@ public class Store implements Serializable{
         Level_Third = level_Third;
     }
 
-    public List<String> getLevelSecTitle() {
+    public ArrayList<String> getLevelSecTitle() {
         return levelSecTitle;
     }
 
-    public void setLevelSecTitle(List<String> levelSecTitle) {
+    public void setLevelSecTitle(ArrayList<String> levelSecTitle) {
         this.levelSecTitle = levelSecTitle;
     }
 
@@ -58,7 +60,12 @@ public class Store implements Serializable{
         return levelThirdTitle;
     }
 
-    public void setLevelThirdTitle(List<String> levelThirdTitle) {
+    public void setLevelThirdTitle(ArrayList<String> levelThirdTitle) {
         this.levelThirdTitle = levelThirdTitle;
+    }
+
+    @Override
+    public String getPickerViewText() {
+        return Level_First;
     }
 }

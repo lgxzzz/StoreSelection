@@ -2,14 +2,20 @@ package com.store.selection.data;
 
 import com.store.selection.bean.Evaluate;
 import com.store.selection.bean.Store;
+import com.store.selection.bean.Village;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /***
  * 基础数据
  * */
 public class DataBase {
+
+    static List<Evaluate> mEvaluates = new ArrayList<>();
+    static List<Store> mStores = new ArrayList<>();
+    static  List<Village> mVillages = new ArrayList<>();
 
     static String[] mDefautlEvalute = new String[]{
         "人流因素,房屋类型,普通住宅,1",
@@ -96,9 +102,15 @@ public class DataBase {
             "儿童亲子,亲子服务：儿童摄影、孕妇写真、亲子餐厅",
     };
 
+    public static String[] mDefaultVillage = new String[]{
+        "河北省石家庄市长安区,桃花源小区,116.472995,39.993743",
+        "河北省石家庄市长安区,天上人间小区,116.472995,39.993743",
+        "河北省石家庄市长安区,工业园小区,116.472995,39.993743",
+    };
+
     //默认的生成的评价因素
     public List<Evaluate> getDefaultEvalute(){
-        List<Evaluate> Evaluate = new ArrayList<>();
+
         try{
             for (int i= 0;i<mDefautlEvalute.length;i++){
                 String paramStr = mDefautlEvalute[i];
@@ -108,20 +120,17 @@ public class DataBase {
                 String lv3 = params[2];
                 String weight = params[3];
                 Evaluate evaluate = createEvaluate(lv1,lv2,lv3,weight);
-                Evaluate.add(evaluate);
+                mEvaluates.add(evaluate);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-
-        return Evaluate;
+        return mEvaluates;
     }
 
     //默认生成的门店类别
     public List<Store> getDefaultAllStore(){
-        List<Store> mStores = new ArrayList<>();
+
         for (int i=0;i<mDefaultStore.length;i++){
             String paramStr = mDefaultStore[i];
             String[] params = paramStr.split(",");
@@ -143,6 +152,21 @@ public class DataBase {
         return mStores;
     }
 
+    public static List<Village> getDefaultVillages(){
+
+        for (int i=0;i<mDefaultVillage.length;i++){
+            String paramsStr = mDefaultVillage[i];
+            String[] params = paramsStr.split(",");
+            String addres = params[0];
+            String name = params[1];
+            String lat = params[2];
+            String lon = params[3];
+            Village village =  createVillage(addres,name,lat+","+lon);
+            mVillages.add(village);
+        }
+        return mVillages;
+    }
+
     public static Store createStore(String lv1,String lv2,String lv3){
         Store store = new Store();
         store.setSTORE_ID(getRandomStore_ID());
@@ -162,6 +186,24 @@ public class DataBase {
         return index;
     }
 
+    public static Village createVillage(String address,String name,String gps){
+        Village village = new Village();
+        village.setVillage_ID(getRandomVillage_ID());
+        village.setVillage_Address(address);
+        village.setVillage_Name(name);
+        village.setmEvalutes(getSystemEvalute());
+        return village;
+    }
+
+    //生成随机小区 id
+    public static String getRandomVillage_ID(){
+        String strRand="V" ;
+        for(int i=0;i<10;i++){
+            strRand += String.valueOf((int)(Math.random() * 10)) ;
+        }
+        return strRand;
+    }
+
     //生成随机index id
     public static String getRandomIndex_ID(){
         String strRand="I" ;
@@ -178,5 +220,31 @@ public class DataBase {
             strRand += String.valueOf((int)(Math.random() * 10)) ;
         }
         return strRand;
+    }
+
+    //给小区随机注入系统评价
+    public static List<Evaluate> getSystemEvalute(){
+        List<Evaluate> evaluates = new ArrayList<>();
+        evaluates.add(getRandomEvaluteByKey("消费水平"));
+        evaluates.add(getRandomEvaluteByKey("小区成熟度"));
+        evaluates.add(getRandomEvaluteByKey("同类竞争店铺情况"));
+        evaluates.add(getRandomEvaluteByKey("互补类店铺情况"));
+        evaluates.add(getRandomEvaluteByKey("范围内公交线路数目"));
+        evaluates.add(getRandomEvaluteByKey("范围内公交站数量"));
+        return evaluates;
+    }
+
+    //随机获取一个评价
+    public static Evaluate getRandomEvaluteByKey(String key){
+        List<Evaluate>  tempDatas = new ArrayList<>();
+        for (int i =0;i<mEvaluates.size();i++){
+            Evaluate evaluate = mEvaluates.get(i);
+            if (evaluate.getLevel_Sec().equals(key)){
+                tempDatas.add(evaluate);
+            }
+        }
+        int index = new Random().nextInt(tempDatas.size());
+        Evaluate evaluate = tempDatas.get(index);
+        return evaluate;
     }
 }

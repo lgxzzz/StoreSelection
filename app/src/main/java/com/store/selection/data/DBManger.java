@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.store.selection.bean.Evaluate;
+import com.store.selection.bean.Report;
 import com.store.selection.bean.Store;
 import com.store.selection.bean.User;
+import com.store.selection.bean.Village;
 import com.store.selection.constant.Constant;
 import com.store.selection.util.SharedPreferenceUtil;
 
@@ -28,7 +30,7 @@ public class DBManger {
     public User mUser;
     public DataBase mDataBase;
     public static  DBManger instance;
-
+    public ReportMgr mReportMgr;
     public static DBManger getInstance(Context mContext){
         if (instance == null){
             instance = new DBManger(mContext);
@@ -40,6 +42,7 @@ public class DBManger {
         this.mContext = mContext;
         mDBHelper = new SQLiteDbHelper(mContext);
         mDataBase = new DataBase();
+        mReportMgr = new ReportMgr(mContext);
         if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
             initDefaultData();
             SharedPreferenceUtil.setFirstTimeUse(false,mContext);
@@ -443,6 +446,54 @@ public class DBManger {
             e.printStackTrace();
         }
     }
+    //添加小区数据
+    public void insertVillage(Village village){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("Village_ID",village.getVillage_ID());
+            values.put("Village_Name",village.getVillage_Name());
+            values.put("Village_Position",village.getVillage_Position());
+            values.put("Village_Address",village.getVillage_Address());
+            String evluatesStr = "";
+            List<Evaluate> evaluates = village.getmEvalutes();
+            for (int i = 0;i<evaluates.size();i++){
+                evluatesStr = evluatesStr+","+evaluates.get(i).getEvalute_id();
+            }
+            values.put("Village_Evalute",evluatesStr);
+            long code = db.insert(SQLiteDbHelper.TAB_VILLAGE,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //查询小区
+    public List<Village> getVillagesByKey(String address){
+        List<Village> mVillages = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Village where Village_Address=?",new String[]{address});
+            while (cursor.moveToNext()){
+                String Village_ID = cursor.getString(cursor.getColumnIndex("Village_ID"));
+                String Village_Name = cursor.getString(cursor.getColumnIndex("Village_Name"));
+                String Village_Evalute = cursor.getString(cursor.getColumnIndex("Village_Evalute"));
+                String Village_Position = cursor.getString(cursor.getColumnIndex("Village_Position"));
+                String Village_Address = cursor.getString(cursor.getColumnIndex("Village_Address"));
+
+                Village village = new Village();
+                village.setVillage_ID(Village_ID);
+                village.setVillage_Name(Village_Name);
+                village.setVillage_Evalute(Village_Evalute);
+                village.setVillage_Position(Village_Position);
+                village.setVillage_Address(Village_Address);
+                mVillages.add(village);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mVillages;
+    }
 
     public void initDefaultData(){
         List<Store> mStores = mDataBase.getDefaultAllStore();
@@ -452,6 +503,10 @@ public class DBManger {
         List<Evaluate> mEvalutes = mDataBase.getDefaultEvalute();
         for (int i=0;i<mEvalutes.size();i++){
             insertEvalute(mEvalutes.get(i));
+        }
+        List<Village> mVillages = mDataBase.getDefaultVillages();
+        for (int i=0;i<mVillages.size();i++){
+            insertVillage(mVillages.get(i));
         }
     }
 

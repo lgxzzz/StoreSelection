@@ -10,6 +10,16 @@
     >
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/address_layout"
+        android:visibility="gone"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:orientation="horizontal"
@@ -88,11 +98,46 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/see_report_btn"
+        android:id="@+id/create_report_btn"
         android:text="生成报告"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         >
 
     </Button>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/search_village_layout"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:id="@+id/search_village_ed"
+                android:layout_height="wrap_content">
+            </EditText>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/search_cancel_btn"
+                android:text="取消"
+                >
+            </Button>
+        </LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/search_village_listview"
+            ></ListView>
+    </LinearLayout>
 </LinearLayout>

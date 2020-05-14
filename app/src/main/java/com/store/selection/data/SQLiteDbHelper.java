@@ -20,7 +20,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
     //评价表
     public static final String TAB_EVALUTE = "Evalute";
     //小区表
-    public static final String TAB_VILLAGE = "Evalute";
+    public static final String TAB_VILLAGE = "Village";
     //报告表
     public static final String TAB_REPORT = "Report";
 
@@ -36,6 +36,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
         createTableStore(db);
         createTableEvalute(db);
         createTableVillage(db);
+        createTableReport(db);
     }
 
     @Override
@@ -79,10 +80,21 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
 
     //创建小区表
     public void createTableVillage(SQLiteDatabase db){
-        db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_EVALUTE +
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_VILLAGE +
                 "(Village_ID varchar(20) primary key, " +
                 "Village_Name varchar(20), " +
                 "Village_Evalute text, " +
+                "Village_Position varchar(20), " +
+                "Village_Address varchar(20))");
+    }
+
+    //创建小区表
+    public void createTableReport(SQLiteDatabase db){
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_REPORT +
+                "(Village_ID varchar(20) primary key, " +
+                "Village_Name varchar(20), " +
+                "Village_Evalute text, " +
+                "Village_Position varchar(20), " +
                 "Village_Address varchar(20))");
     }
 }

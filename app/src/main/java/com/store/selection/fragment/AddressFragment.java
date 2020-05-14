@@ -10,7 +10,9 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -36,8 +40,10 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.gson.Gson;
 import com.store.selection.R;
 import com.store.selection.StoreDescribeActivity;
+import com.store.selection.adapter.VillageAdapter;
 import com.store.selection.bean.JsonBean;
 import com.store.selection.bean.User;
+import com.store.selection.bean.Village;
 import com.store.selection.data.DBManger;
 import com.store.selection.util.GetJsonDataUtil;
 
@@ -59,16 +65,26 @@ public class AddressFragment extends Fragment {
 
     private static boolean isLoaded = false;
 
+    private LinearLayout mAddressLayout;
+    private LinearLayout mSearchVillageLayout;
+    private ListView mSearchListView;
+    private VillageAdapter mVillageAdapter;
+    private EditText mSearchVillageEd;
+    private Button mCancelBtn;
     private EditText mVillageAddresEd;
+    private EditText mVillageNameEd;
     private Spinner mVillageNearSp;
     private Button mStoreDetailBtn;
+    private Button mCreateReportBtn;
 
     private MapView mMapView = null;
     private AMap mAMap;
     private Marker mLocationMarker; // 选择的点
 
     List<String> mNearDisData =new ArrayList<>();
+    List<Village> mVillages = new ArrayList<>();
 
+    Village mCurrentVillage;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragement_address, container, false);
@@ -144,6 +160,55 @@ public class AddressFragment extends Fragment {
         SpinnerAdapter adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,mNearDisData);
         mVillageNearSp.setAdapter(adapter);
 
+        mVillageNameEd  = view.findViewById(R.id.village_name_ed);
+        mVillageNameEd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAddressLayout.setVisibility(View.GONE);
+                mSearchVillageLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mSearchVillageEd = view.findViewById(R.id.search_village_ed);
+        mSearchVillageEd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mVillages = DBManger.getInstance(getContext()).getVillagesByKey(s.toString());
+                mVillageAdapter.setData(mVillages);
+            }
+        });
+
+        mAddressLayout = view.findViewById(R.id.address_layout);
+        mSearchVillageLayout = view.findViewById(R.id.search_village_layout);
+        mSearchListView = view.findViewById(R.id.search_village_listview);
+        mVillageAdapter = new VillageAdapter(getContext());
+        mSearchListView.setAdapter(mVillageAdapter);
+        mSearchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAddressLayout.setVisibility(View.VISIBLE);
+                mSearchVillageLayout.setVisibility(View.GONE);
+                mCurrentVillage = mVillages.get(position);
+            }
+        });
+
+        mCreateReportBtn = view.findViewById(R.id.create_report_btn);
+        mCreateReportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     };
 
     //增加图标
