@@ -6,11 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.store.selection.bean.User;
 import com.store.selection.data.DBManger;
 import com.store.selection.fragment.AboutFragment;
 import com.store.selection.fragment.AddressFragment;
+import com.store.selection.fragment.EvaluteFragment;
 import com.store.selection.fragment.HistoryFragment;
 import com.store.selection.fragment.ScoreFragment;
 import com.store.selection.fragment.StoreFragment;
@@ -25,6 +28,10 @@ public class MainActivity extends BaseActivtiy {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window win = getWindow ();
+        WindowManager.LayoutParams params = win.getAttributes ();
+        win.setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+
         setContentView(R.layout.activity_main);
 
         init();
@@ -88,7 +95,7 @@ public class MainActivity extends BaseActivtiy {
                 FragmentUtils.replaceFragmentToActivity(fragmentManager, StoreFragment.getInstance(),R.id.main_frame);
                 break;
             case R.id.bottom_menu_score:
-                FragmentUtils.replaceFragmentToActivity(fragmentManager, ScoreFragment.getInstance(),R.id.main_frame);
+                FragmentUtils.replaceFragmentToActivity(fragmentManager, EvaluteFragment.getInstance(),R.id.main_frame);
                 break;
             case R.id.bottom_menu_mgr_about:
                 FragmentUtils.replaceFragmentToActivity(fragmentManager, AboutFragment.getInstance(),R.id.main_frame);

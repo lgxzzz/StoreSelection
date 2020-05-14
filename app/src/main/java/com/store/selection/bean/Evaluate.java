@@ -1,9 +1,10 @@
 package com.store.selection.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Evaluate {
+public class Evaluate implements Serializable{
     //指数参数id
     public String evalute_id;
     //权重

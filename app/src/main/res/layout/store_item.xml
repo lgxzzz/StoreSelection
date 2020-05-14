@@ -18,13 +18,21 @@
 
         >
     </TextView>
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/store_level_2_layout"
         android:orientation="vertical"
         android:layout_margin="3dp"
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/store_level_2_layout"
+            android:orientation="vertical"
+            android:layout_margin="3dp"
+            android:visibility="gone"
+            >
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

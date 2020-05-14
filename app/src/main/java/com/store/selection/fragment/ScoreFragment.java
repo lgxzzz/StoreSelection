@@ -26,7 +26,7 @@ public class ScoreFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragement_about, container, false);
+        View view =  inflater.inflate(R.layout.fragement_evalute, container, false);
         initView(view);
 
         return view;

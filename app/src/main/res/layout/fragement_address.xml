@@ -89,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/see_report_btn"
-        android:text="查看"
+        android:text="生成报告"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         >

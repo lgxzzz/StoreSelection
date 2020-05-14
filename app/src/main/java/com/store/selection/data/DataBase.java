@@ -36,7 +36,7 @@ public class DataBase {
         "环境因素,互补类店铺情况,2种,3",
         "环境因素,互补类店铺情况,3种,4",
         "环境因素,互补类店铺情况,4种,5",
-        "环境因素,周边大中型地区数量,4所及以上1",
+        "环境因素,周边大中型地区数量,4所及以上,1",
         "环境因素,周边大中型地区数量,3所,2",
         "环境因素,周边大中型地区数量,2所,3",
         "环境因素,周边大中型地区数量,1所,4",
@@ -75,21 +75,21 @@ public class DataBase {
             "餐饮,亚洲菜：日本料理、韩国料理、东南亚菜、泰国菜、新加坡菜、印度菜、越南菜",
             "餐饮,面包甜点：甜品店、面包蛋糕",
             "餐饮,咖啡饮料：奶茶店、饮料店、咖啡厅",
-            "餐饮,其他",
+            "餐饮,其他：其他",
 
             "零售,个人装扮：奢侈品、快时尚、男装、女装、眼镜、围巾、帽子、手表、男鞋、女鞋、旅行箱、手提包、化妆品、假发、老人服饰、伞",
             "零售,家居生活：超市、家具店、家饰家纺、茶酒店、水果生鲜、数码产品、礼品文具、花店、车、音像制品、乐器",
             "零售,运动户外：运动服饰、运动装备、运动综合",
-            "零售,其他",
+            "零售,其他：",
 
             "休闲娱乐,娱乐：网吧网咖、俱乐部、棋牌桌游、私人影院、DIY手工坊、艺术空间、轰趴",
             "休闲娱乐,运动：健身、乒乓球、桌球、舞蹈、瑜伽、跆拳道、羽毛球",
             "休闲娱乐,休闲：足疗、按摩、洗浴、茶馆、书店",
-            "休闲娱乐,其他",
+            "休闲娱乐,其他：其他",
 
             "生活配套及服务,生活服务：宠物服务、地产服务、婚礼服务、美容美发美甲、药店、齿科、中医养生、妇婴保健、儿童健康、摄影服务",
             "生活配套及服务,生活配套：通信营业厅、酒店、旅行社、语言教育、音乐培训、运动培训、美术培训、职业培训",
-            "生活配套及服务,其他",
+            "生活配套及服务,其他：其他",
 
             "儿童亲子,亲子购物：母婴用品、儿童服装、儿童玩具、儿童食品",
             "儿童亲子,亲子教育：早教中心、艺术培训、儿童英语、课外辅导、亲子阅读",
@@ -99,16 +99,22 @@ public class DataBase {
     //默认的生成的评价因素
     public List<Evaluate> getDefaultEvalute(){
         List<Evaluate> Evaluate = new ArrayList<>();
-        for (int i= 0;i<mDefautlEvalute.length;i++){
-            String paramStr = mDefautlEvalute[i];
-            String[] params = paramStr.split(",");
-            String lv1 = params[0];
-            String lv2 = params[1];
-            String lv3 = params[2];
-            String weight = params[3];
-            Evaluate evaluate = createEvaluate(lv1,lv2,lv3,weight);
-            Evaluate.add(evaluate);
+        try{
+            for (int i= 0;i<mDefautlEvalute.length;i++){
+                String paramStr = mDefautlEvalute[i];
+                String[] params = paramStr.split(",");
+                String lv1 = params[0];
+                String lv2 = params[1];
+                String lv3 = params[2];
+                String weight = params[3];
+                Evaluate evaluate = createEvaluate(lv1,lv2,lv3,weight);
+                Evaluate.add(evaluate);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
+
 
         return Evaluate;
     }
@@ -122,12 +128,17 @@ public class DataBase {
             String lv1 = params[0];
             String[] params2 = params[1].split("：");
             String lv2 = params2[0];
-            String[] params3 = params2[1].split("、");
-            for (int j=0;j<params3.length;j++){
-                String lv3 = params3[j];
-                Store store = createStore(lv1,lv2,lv3);
-                mStores.add(store);
+            if (params2.length!=1){
+                String[] params3 = params2[1].split("、");
+                for (int j=0;j<params3.length;j++){
+                    String lv3 = params3[j];
+                    Store store = createStore(lv1,lv2,lv3);
+                    mStores.add(store);
+                }
+            }else{
+
             }
+
         }
         return mStores;
     }

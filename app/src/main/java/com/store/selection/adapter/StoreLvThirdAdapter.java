@@ -12,33 +12,29 @@ import android.widget.TextView;
 
 import com.store.selection.R;
 import com.store.selection.bean.Store;
-import com.store.selection.data.DBManger;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-public class StoreAdapter extends BaseAdapter {
+public class StoreLvThirdAdapter extends BaseAdapter {
 
     Context mContext;
-    List<Store> mStore = new ArrayList<>();
+    List<String> mStoreLv3 = new ArrayList<>();
 
 
-    public StoreAdapter(Context mContext,  List<Store> mStore){
+    public StoreLvThirdAdapter(Context mContext, List<String> mStoreLv3){
         this.mContext = mContext;
-        this.mStore = mStore;
+        this.mStoreLv3 = mStoreLv3;
     }
 
     @Override
     public int getCount() {
-        return mStore.size();
+        return mStoreLv3.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return mStore.get(i);
+        return mStoreLv3.get(i);
     }
 
     @Override
@@ -48,31 +44,20 @@ public class StoreAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Store store = mStore.get(i);
-        StoreAdapter.ViewHoler holer = null;
+        String title = mStoreLv3.get(i);
+        StoreLvThirdAdapter.ViewHoler holer = null;
         if (view == null){
-            holer = new StoreAdapter.ViewHoler();
+            holer = new StoreLvThirdAdapter.ViewHoler();
             view = LayoutInflater.from(mContext).inflate(R.layout.store_item,null);
             holer.mFisrtTv = (TextView) view.findViewById(R.id.store_level_1_btn);
             holer.mSecLayout = (LinearLayout) view.findViewById(R.id.store_level_2_layout);
             view.setTag(holer);
         }else{
-            holer = (StoreAdapter.ViewHoler) view.getTag();
+            holer = (StoreLvThirdAdapter.ViewHoler) view.getTag();
         }
+        final View v = holer.mSecLayout;
+        holer.mFisrtTv.setText(title);
 
-        holer.mFisrtTv.setText(store.getLevel_First());
-        List<String> mSecTitles = store.getLevelSecTitle();
-        for (int j=0;j<mSecTitles.size();j++){
-            Button button = new Button(mContext);
-            button.setText(mSecTitles.get(j));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //跳转三级界面
-                }
-            });
-            holer.mSecLayout.addView(button);
-        }
         return view;
     }
 

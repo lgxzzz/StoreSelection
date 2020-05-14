@@ -42,6 +42,7 @@ public class DBManger {
         mDataBase = new DataBase();
         if (SharedPreferenceUtil.getFirstTimeUse(mContext)){
             initDefaultData();
+            SharedPreferenceUtil.setFirstTimeUse(false,mContext);
         }
     }
 
@@ -55,15 +56,15 @@ public class DBManger {
                 String USER_ID = cursor.getString(cursor.getColumnIndex("USER_ID"));
                 String USER_NAME = cursor.getString(cursor.getColumnIndex("USER_NAME"));
                 String USER_MAIL = cursor.getString(cursor.getColumnIndex("USER_MAIL"));
-                String LIFT_PROCESSORPHONE = cursor.getString(cursor.getColumnIndex("LIFT_PROCESSORPHONE"));
-                String USER_CHARCTER = cursor.getString(cursor.getColumnIndex("USER_CHARCTER"));
+                String USER_TEL = cursor.getString(cursor.getColumnIndex("USER_TEL"));
+                String USER_ROLE = cursor.getString(cursor.getColumnIndex("USER_ROLE"));
 
                 mUser = new User();
                 mUser.setUserId(USER_ID);
                 mUser.setUserName(USER_NAME);
-                mUser.setTelephone(LIFT_PROCESSORPHONE);
+                mUser.setTelephone(USER_TEL);
                 mUser.setMail(USER_MAIL);
-                mUser.setRole(USER_CHARCTER);
+                mUser.setRole(USER_ROLE);
                 listener.onSuccess();
             }else{
                 listener.onError("未查询到该用户");
@@ -86,8 +87,8 @@ public class DBManger {
                 ContentValues values = new ContentValues();
                 values.put("USER_NAME",user.getUserName());
                 values.put("USER_MAIL",user.getMail());
-                values.put("LIFT_PROCESSORPHONE",user.getTelephone());
-                values.put("USER_CHARCTER",user.getRole());
+                values.put("USER_TEL",user.getTelephone());
+                values.put("USER_ROLE",user.getRole());
 
                 int code = db.update(SQLiteDbHelper.TAB_USER,values,"USER_NAME =?",new String[]{user.getUserName()+""});
                 listener.onSuccess();
@@ -113,9 +114,8 @@ public class DBManger {
                 values.put("USER_ID",userid);
                 values.put("USER_NAME",user.getUserName());
                 values.put("USER_PASSWORD",user.getPassword());
-                values.put("LIFT_PROCESSORPHONE",user.getTelephone());
-                values.put("USER_MAIL",user.getMail());
-                values.put("USER_CHARCTER",user.getRole());
+                values.put("USER_TEL",user.getMail());
+                values.put("USER_ROLE",user.getRole());
                 mUser = user;
                 mUser.setUserId(userid);
                 long code = db.insert(SQLiteDbHelper.TAB_USER,null,values);
@@ -316,7 +316,9 @@ public class DBManger {
                 store.setLevel_First(lv1);
                 for (int i=0;i<temps.size();i++){
                     Store temp = temps.get(i);
+                    if (!store.getLevelSecTitle().contains(temp.getLevel_Sec()))
                     store.getLevelSecTitle().add(temp.getLevel_Sec());
+                    if (!store.getLevelThirdTitle().contains(temp.getLevel_Third()))
                     store.getLevelThirdTitle().add(temp.getLevel_Third());
                 }
                 mStores.add(store);
@@ -366,9 +368,41 @@ public class DBManger {
                 evaluate.setLevel_First(lv1);
                 for (int i=0;i<temps.size();i++){
                     Evaluate temp = temps.get(i);
-                    evaluate.getLevelSecTitle().add(temp.getLevel_Sec());
-                    evaluate.getLevelThirdTitle().add(temp.getLevel_Third());
+
+                    if (!evaluate.getLevelSecTitle().contains(temp.getLevel_Sec()))
+                        evaluate.getLevelSecTitle().add(temp.getLevel_Sec());
+                    if (!evaluate.getLevelThirdTitle().contains(temp.getLevel_Third()))
+                        evaluate.getLevelThirdTitle().add(temp.getLevel_Third());
+
+
+
                 }
+                mEvalutes.add(evaluate);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mEvalutes;
+    }
+
+    //获取所有评价标准
+    public List<Evaluate> getAllEvalute(){
+        List<Evaluate> mEvalutes = new ArrayList<>();
+        HashMap<String, List<Evaluate>> mTempMap = new HashMap<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_EVALUTE,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
+                String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
+                String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+                Evaluate evaluate = new Evaluate();
+                evaluate.setWeight(WEIGHT);
+                evaluate.setLevel_First(EVA_LEVLE_1);
+                evaluate.setLevel_Sec(EVA_LEVLE_2);
+                evaluate.setLevel_Third(EVA_LEVLE_3);
                 mEvalutes.add(evaluate);
             }
         }catch (Exception e){
@@ -400,8 +434,8 @@ public class DBManger {
             ContentValues values = new ContentValues();
             values.put("EVA_ID",evaluate.getEvalute_id());
             values.put("WEIGHT",evaluate.getWeight());
-            values.put("EVA_LEVLE_1",evaluate.getLevel_Sec());
-            values.put("EVA_LEVLE_2",evaluate.getLevel_Third());
+            values.put("EVA_LEVLE_1",evaluate.getLevel_First());
+            values.put("EVA_LEVLE_2",evaluate.getLevel_Sec());
             values.put("EVA_LEVLE_3",evaluate.getLevel_Third());
             long code = db.insert(SQLiteDbHelper.TAB_EVALUTE,null,values);
             db.close();

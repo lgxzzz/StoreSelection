@@ -1,9 +1,10 @@
 package com.store.selection.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Store {
+public class Store implements Serializable{
     String STORE_ID;
     String Level_First;//一级分类
     String Level_Sec;//二级分类

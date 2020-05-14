@@ -14,5 +14,22 @@
         android:layout_weight="1"
         android:layout_margin="10dp"
         android:id="@+id/evalute_listview"
+        android:visibility="gone"
         ></ListView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="3dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/evalute_layout"
+            android:orientation="vertical"
+            android:layout_margin="3dp"
+            >
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

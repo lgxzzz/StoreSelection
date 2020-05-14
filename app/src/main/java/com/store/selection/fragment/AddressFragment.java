@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,7 @@ public class AddressFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMapView.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -113,7 +114,7 @@ public class AddressFragment extends Fragment {
         mAMap = mMapView.getMap();
         //省城市县选择
         mVillageAddresEd = view.findViewById(R.id.village_address_ed);
-        mVillageAddresEd.setEnabled(false);
+        mVillageAddresEd.setInputType(InputType.TYPE_NULL);
         mVillageAddresEd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +135,7 @@ public class AddressFragment extends Fragment {
             }
         });
 
-        mVillageNearSp = view.findViewById(R.id.village_type_sp);
+        mVillageNearSp = view.findViewById(R.id.village_near_sp);
 
         mNearDisData.add("500M");
         mNearDisData.add("1KM");

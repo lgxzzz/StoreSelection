@@ -34,10 +34,13 @@
     </activity>
     <activity android:name=".MainActivity"
         android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustResize"
         ></activity>
     <activity android:name=".LoginActivity"></activity>
     <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".StoreDescribeActivity"/>
+        <activity android:name=".StoreThirdActivity"/>
+        <activity android:name=".EvaluteThirdActivity"/>
         <service android:name="com.amap.api.location.APSService"></service>
         <activity android:name="com.amap.api.navi.AmapRouteActivity"
             android:theme="@android:style/Theme.NoTitleBar"
