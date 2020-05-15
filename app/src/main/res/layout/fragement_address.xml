@@ -50,14 +50,14 @@
             android:text="小区名字:"
             android:textSize="20dp" />
 
-        <EditText
+        <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/village_name_ed"
+            android:id="@+id/village_name_sp"
             >
 
-        </EditText>
+        </Spinner>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

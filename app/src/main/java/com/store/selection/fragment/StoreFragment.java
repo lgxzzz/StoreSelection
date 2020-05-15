@@ -69,8 +69,9 @@ public class StoreFragment extends Fragment {
             });
             List<String> mSecTitles = store.getLevelSecTitle();
             for (int j=0;j<mSecTitles.size();j++){
+                final String title = mSecTitles.get(j);
                 Button button = new Button(getContext());
-                button.setText(mSecTitles.get(j));
+                button.setText(title);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -78,6 +79,7 @@ public class StoreFragment extends Fragment {
                         intent.setClass(getContext(),StoreThirdActivity.class);
                         Bundle b = new Bundle();
                         b.putSerializable("store",store);
+                        b.putSerializable("lv2",title);
                         intent.putExtras(b);
                         getContext().startActivity(intent);
                     }

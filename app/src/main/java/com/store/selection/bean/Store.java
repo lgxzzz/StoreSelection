@@ -68,4 +68,15 @@ public class Store implements Serializable, IPickerViewData {
     public String getPickerViewText() {
         return Level_First;
     }
+
+    public List<String> getLv3FilterByLv2(String lv2) {
+        List<String> temp = new ArrayList<>();
+        for (int i=0;i<levelThirdTitle.size();i++){
+            String title = levelThirdTitle.get(i);
+            if (title.equals(lv2)){
+                temp.add(title);
+            }
+        }
+        return temp;
+    }
 }

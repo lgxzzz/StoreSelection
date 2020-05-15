@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
+        android:layout_weight="1"
         android:id="@+id/store_listview"
         ></ListView>
     <Button
@@ -19,5 +20,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/store_add_btn"
         android:text="添加店铺类型"
+        android:layout_gravity="center"
         />
 </LinearLayout>

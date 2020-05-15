@@ -1,6 +1,7 @@
 package com.store.selection;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.store.selection.adapter.StoreLvThirdAdapter;
 import com.store.selection.bean.Store;
 import com.store.selection.data.DBManger;
+import com.store.selection.view.AddStoreDialog;
 
 import java.util.List;
 
@@ -29,6 +31,10 @@ public class StoreThirdActivity extends Activity{
 
     LinearLayout mStoreLayout;
 
+    Button mAddStoreBtn;
+
+    AddStoreDialog mDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +45,29 @@ public class StoreThirdActivity extends Activity{
 
     public void initView(){
         mListView = findViewById(R.id.store_listview);
+        mAddStoreBtn = findViewById(R.id.store_add_btn);
         mStoreLayout = findViewById(R.id.store_layout);
+        mDialog = new AddStoreDialog(StoreThirdActivity.this,R.layout.dialog_add_store,true,true);
+        mAddStoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mDialog.show();
+            }
+        });
+
+        mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                initData();
+            }
+        });
     };
 
     public void initData() {
-        Store store = (Store) getIntent().getExtras().getSerializable("store");
-        mAdapter = new StoreLvThirdAdapter(this, store.getLevelThirdTitle());
+        String lv2 = (String) getIntent().getExtras().getSerializable("lv2");
+        List<String> mStores = DBManger.getInstance(this).getStoresByLv2(lv2);
+        mAdapter = new StoreLvThirdAdapter(this, mStores);
         mListView.setAdapter(mAdapter);
 
     }

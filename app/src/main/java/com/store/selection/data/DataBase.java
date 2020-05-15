@@ -159,8 +159,8 @@ public class DataBase {
             String[] params = paramsStr.split(",");
             String addres = params[0];
             String name = params[1];
-            String lat = params[2];
-            String lon = params[3];
+            String lon = params[2];
+            String lat = params[3];
             Village village =  createVillage(addres,name,lat+","+lon);
             mVillages.add(village);
         }
@@ -192,6 +192,7 @@ public class DataBase {
         village.setVillage_Address(address);
         village.setVillage_Name(name);
         village.setmEvalutes(getSystemEvalute());
+        village.setVillage_Position(gps);
         return village;
     }
 

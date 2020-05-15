@@ -8,6 +8,9 @@ import android.widget.ListView;
 import com.store.selection.adapter.StoreLvThirdAdapter;
 import com.store.selection.bean.Evaluate;
 import com.store.selection.bean.Store;
+import com.store.selection.data.DBManger;
+
+import java.util.List;
 
 
 public class EvaluteThirdActivity extends Activity{
@@ -32,8 +35,9 @@ public class EvaluteThirdActivity extends Activity{
     };
 
     public void initData() {
-        Evaluate evaluate = (Evaluate) getIntent().getExtras().getSerializable("evaluate");
-        mAdapter = new StoreLvThirdAdapter(this, evaluate.getLevelThirdTitle());
+        String lv2 = (String) getIntent().getExtras().getSerializable("lv2");
+        List<String> mEvalutes = DBManger.getInstance(this).getEvluatesByLv2(lv2);
+        mAdapter = new StoreLvThirdAdapter(this, mEvalutes);
         mListView.setAdapter(mAdapter);
 
     }

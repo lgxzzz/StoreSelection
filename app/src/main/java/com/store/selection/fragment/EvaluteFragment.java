@@ -73,8 +73,9 @@ public class EvaluteFragment extends Fragment {
             });
             List<String> mSecTitles = evaluate.getLevelSecTitle();
             for (int j=0;j<mSecTitles.size();j++){
+                final String titile = mSecTitles.get(j);
                 Button button = new Button(getContext());
-                button.setText(mSecTitles.get(j));
+                button.setText(titile);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -82,6 +83,7 @@ public class EvaluteFragment extends Fragment {
                         intent.setClass(getContext(),EvaluteThirdActivity.class);
                         Bundle b = new Bundle();
                         b.putSerializable("evaluate",evaluate);
+                        b.putSerializable("lv2",titile);
                         intent.putExtras(b);
                         getContext().startActivity(intent);
                     }

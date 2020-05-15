@@ -308,6 +308,79 @@ public class DBManger {
         return store;
     }
 
+    //根据id获取店铺信息
+    public Store getStoreByLv3(String lv3){
+        Store store = null;
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Store where STORE_LEVLE_3=?",new String[]{lv3});
+            while (cursor.moveToNext()){
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
+                String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
+                String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
+                String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
+                store = new Store();
+                store.setSTORE_ID(STORE_ID);
+                store.setLevel_First(STORE_LEVLE_1);
+                store.setLevel_Sec(STORE_LEVLE_2);
+                store.setLevel_Third(STORE_LEVLE_3);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return store;
+    }
+
+
+    //获取所有店铺数据
+    public List<Store> getAllStore(){
+        List<Store> mStores = new ArrayList<>();
+        HashMap<String, List<Store>> mTempMap = new HashMap<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_STORE,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
+                String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
+                String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
+                String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
+                Store store = new Store();
+                store.setSTORE_ID(STORE_ID);
+                store.setLevel_First(STORE_LEVLE_1);
+                store.setLevel_Sec(STORE_LEVLE_2);
+                store.setLevel_Third(STORE_LEVLE_3);
+                mStores.add(store);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mStores;
+    }
+
+    //根据lv2获取店铺信息
+    public List<String> getStoresByLv2(String lv2){
+        List<String> mStores = new ArrayList<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Store where STORE_LEVLE_2=?",new String[]{lv2});
+            while (cursor.moveToNext()){
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
+                String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
+                String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
+                String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
+
+                mStores.add(STORE_LEVLE_3);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mStores;
+    }
+
     //获取店铺一级
     public List<Store> getStoreByLevelFirst(){
         List<Store> mStores = new ArrayList<>();
@@ -317,10 +390,12 @@ public class DBManger {
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
             Cursor cursor = db.query(SQLiteDbHelper.TAB_STORE,null,null,null,null,null,null);
             while (cursor.moveToNext()){
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
                 String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
                 String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
                 String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
                 Store store = new Store();
+                store.setSTORE_ID(STORE_ID);
                 store.setLevel_First(STORE_LEVLE_1);
                 store.setLevel_Sec(STORE_LEVLE_2);
                 store.setLevel_Third(STORE_LEVLE_3);
@@ -345,6 +420,8 @@ public class DBManger {
                 store.setLevel_First(lv1);
                 for (int i=0;i<temps.size();i++){
                     Store temp = temps.get(i);
+                    store.setLevel_Sec(temp.getLevel_Sec());
+                    store.setLevel_Third(temp.getLevel_Third());
                     if (!store.getLevelSecTitle().contains(temp.getLevel_Sec()))
                     store.getLevelSecTitle().add(temp.getLevel_Sec());
                     if (!store.getLevelThirdTitle().contains(temp.getLevel_Third()))
@@ -414,6 +491,27 @@ public class DBManger {
         return mEvalutes;
     }
 
+    //根据lv2获取店铺信息
+    public List<String> getEvluatesByLv2(String lv2){
+        List<String> mStores = new ArrayList<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Evalute where EVA_LEVLE_2=?",new String[]{lv2});
+            while (cursor.moveToNext()){
+                String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
+                String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
+                String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+
+                mStores.add(EVA_LEVLE_3);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mStores;
+    }
+
     //根据id获取评价
     public Evaluate getEvaluateByKey(String id){
         Evaluate evaluate = null;
@@ -449,12 +547,14 @@ public class DBManger {
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
             Cursor cursor = db.query(SQLiteDbHelper.TAB_EVALUTE,null,null,null,null,null,null);
             while (cursor.moveToNext()){
+                String EVA_ID = cursor.getString(cursor.getColumnIndex("EVA_ID"));
                 String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
                 String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
                 String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
                 String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
                 Evaluate evaluate = new Evaluate();
                 evaluate.setWeight(WEIGHT);
+                evaluate.setEvalute_id(EVA_ID);
                 evaluate.setLevel_First(EVA_LEVLE_1);
                 evaluate.setLevel_Sec(EVA_LEVLE_2);
                 evaluate.setLevel_Third(EVA_LEVLE_3);
@@ -533,12 +633,15 @@ public class DBManger {
                 String Village_Position = cursor.getString(cursor.getColumnIndex("Village_Position"));
                 String Village_Address = cursor.getString(cursor.getColumnIndex("Village_Address"));
 
+
                 Village village = new Village();
                 village.setVillage_ID(Village_ID);
                 village.setVillage_Name(Village_Name);
                 village.setVillage_Evalute(Village_Evalute);
                 village.setVillage_Position(Village_Position);
                 village.setVillage_Address(Village_Address);
+                village.setmEvalutes(parseIDStrToEvalute(Village_Evalute));
+
                 mVillages.add(village);
             }
         }catch (Exception e){
@@ -566,6 +669,7 @@ public class DBManger {
                 village.setVillage_Evalute(Village_Evalute);
                 village.setVillage_Position(Village_Position);
                 village.setVillage_Address(Village_Address);
+                village.setmEvalutes(parseIDStrToEvalute(Village_Evalute));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -577,8 +681,8 @@ public class DBManger {
         mReportMgr.setVillageToCreateReport(village);
     }
 
-    public void createReport(){
-        Report report = mReportMgr.createReport();
+    public void createReport(IListener listener){
+        Report report = mReportMgr.createReport(listener);
         insertReport(report);
     }
 
@@ -590,6 +694,7 @@ public class DBManger {
             values.put("Report_ID",report.getReport_ID());
             values.put("Village_ID",report.getVillage().getVillage_ID());
             values.put("Report_Time",report.getReport_Time());
+            values.put("STORE_ID",report.getStore().getSTORE_ID());
             String evluatesStr = "";
             List<Evaluate> evaluates = report.getmEvalutes();
             for (int i = 0;i<evaluates.size();i++){

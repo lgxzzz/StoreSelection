@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +34,9 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class StoreDescribeActivity extends Activity{
@@ -49,11 +52,15 @@ public class StoreDescribeActivity extends Activity{
 
     List<Evaluate> mAllEvalutes;
     public HashMap<String,Evaluate> mUserChooseEvalutes = new HashMap<>();
+    Store mCurrentStore;
 
     List<String> mNearMainroadDisData;
     List<String> mVillageTypeData;
     List<String> mStoreAddressData;
     List<String> mStoreVisibleData;
+
+    List<Store> mAllStores = new ArrayList<>();
+    HashMap<String, List<Store>> mStoreLv1Map = new HashMap<>();
 
     private List<Store> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
@@ -77,6 +84,14 @@ public class StoreDescribeActivity extends Activity{
 
 
         mStoreTypeEd = findViewById(R.id.store_type_ed);
+        mStoreTypeEd.setInputType(InputType.TYPE_NULL);
+        mStoreTypeEd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPickerView();
+            }
+        });
+
         mNearMainroadDisSp = findViewById(R.id.store_near_mainroad_dis_sp);
         mVillageTypeSp = findViewById(R.id.village_type_sp);
         mStoreAddressSp = findViewById(R.id.store_address_sp);
@@ -165,6 +180,7 @@ public class StoreDescribeActivity extends Activity{
             @Override
             public void onClick(View v) {
                 DBManger.getInstance(getBaseContext()).mReportMgr.mUserChooseEvalutes = mUserChooseEvalutes;
+                DBManger.getInstance(getBaseContext()).mReportMgr.mCurrentStore = mCurrentStore;
                 finish();
             }
         });
@@ -215,6 +231,7 @@ public class StoreDescribeActivity extends Activity{
                 String tx = opt1tx + opt2tx + opt3tx;
                 Toast.makeText(StoreDescribeActivity.this, tx, Toast.LENGTH_SHORT).show();
                 mStoreTypeEd.setText(tx);
+                mCurrentStore = getStoreByLv3(opt3tx);
             }
         })
 
@@ -232,20 +249,17 @@ public class StoreDescribeActivity extends Activity{
 
     private void initJsonData() {//解析数据
 
-
-        options1Items = DBManger.getInstance(this).getStoreByLevelFirst();
+        refreshStoreData();
 
         for (int i = 0; i < options1Items.size(); i++) {
-            ArrayList<String> cityList =options1Items.get(i).getLevelSecTitle();
+            Store store = options1Items.get(i);
+            ArrayList<String> cityList = getStoreLv2(store.getLevel_First());
             ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();
 
             for (int c = 0; c < cityList.size(); c++) {
-                String cityName = cityList.get(c);
                 ArrayList<String> city_AreaList = new ArrayList<>();
 
-                for (int j =0;j<options1Items.get(i).getLevelThirdTitle().size();j++){
-                    city_AreaList.add(options1Items.get(i).getLevelThirdTitle().get(j));
-                }
+                city_AreaList = getStoreLv3(cityList.get(c));
                 province_AreaList.add(city_AreaList);
             }
 
@@ -263,6 +277,88 @@ public class StoreDescribeActivity extends Activity{
         mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
 
     }
+
+    public Store getStoreByLv3(String lv3){
+        Store store = null;
+        store = DBManger.getInstance(getApplication()).getStoreByLv3(lv3);
+        return store;
+    }
+
+    public ArrayList<String> getStoreLv2(String lv1){
+        HashMap<String, String> mStoreLv2Map = new HashMap<>();
+        ArrayList<String> mtemps = new ArrayList<>();
+        for (int i = 0;i<mAllStores.size();i++){
+            Store store = mAllStores.get(i);
+            if (store.getLevel_First().equals(lv1)){
+                mStoreLv2Map.put(store.getLevel_Sec(),"");
+            }
+        }
+        Iterator<Map.Entry<String,String>> iter = mStoreLv2Map.entrySet()
+                .iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String)entry.getKey();
+            mtemps.add(key);
+        }
+        return mtemps;
+    }
+
+    public ArrayList<String> getStoreLv3(String lv2){
+
+        HashMap<String, String> mStoreLv3Map = new HashMap<>();
+
+        ArrayList<String> mtemps = new ArrayList<>();
+        for (int i = 0;i<mAllStores.size();i++){
+            Store store = mAllStores.get(i);
+            if (store.getLevel_Sec().equals(lv2)){
+                mStoreLv3Map.put(store.getLevel_Third(),"");
+            }
+        }
+        Iterator<Map.Entry<String,String>> iter = mStoreLv3Map.entrySet()
+                .iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String)entry.getKey();
+            mtemps.add(key);
+        }
+        return mtemps;
+    }
+
+    public void refreshStoreData(){
+        mStoreLv1Map.clear();
+        mAllStores = DBManger.getInstance(this).getAllStore();
+        for (int i =0 ;i<mAllStores.size();i++){
+            Store store = mAllStores.get(i);
+            String STORE_LEVLE_1 = store.getLevel_First();
+            if (!mStoreLv1Map.containsKey(STORE_LEVLE_1)){
+                List<Store> stores = new ArrayList<>();
+                stores.add(store);
+                mStoreLv1Map.put(STORE_LEVLE_1,stores);
+            }else{
+                List<Store> stores = mStoreLv1Map.get(STORE_LEVLE_1);
+                stores.add(store);
+                mStoreLv1Map.put(STORE_LEVLE_1,stores);
+            }
+        }
+        Iterator<Map.Entry<String, List<Store>>> iter = mStoreLv1Map.entrySet()
+                .iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String lv1 = (String)entry.getKey();
+            List<Store> temps= (List<Store>)entry.getValue();
+            Store store = new Store();
+            store.setLevel_First(lv1);
+            for (int i=0;i<temps.size();i++){
+                Store temp = temps.get(i);
+                store.setLevel_Sec(temp.getLevel_Sec());
+                store.setLevel_Third(temp.getLevel_Third());
+            }
+            options1Items.add(store);
+        }
+        int x = 1;
+    }
+
+
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {

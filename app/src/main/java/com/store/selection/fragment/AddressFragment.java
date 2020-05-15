@@ -72,7 +72,7 @@ public class AddressFragment extends Fragment {
     private EditText mSearchVillageEd;
     private Button mCancelBtn;
     private EditText mVillageAddresEd;
-    private EditText mVillageNameEd;
+    private Spinner mVillageNameSp;
     private Spinner mVillageNearSp;
     private Button mStoreDetailBtn;
     private Button mCreateReportBtn;
@@ -82,6 +82,7 @@ public class AddressFragment extends Fragment {
     private Marker mLocationMarker; // 选择的点
 
     List<String> mNearDisData =new ArrayList<>();
+    List<String> mVillagesData =new ArrayList<>();
     List<Village> mVillages = new ArrayList<>();
 
     Village mCurrentVillage;
@@ -160,14 +161,9 @@ public class AddressFragment extends Fragment {
         SpinnerAdapter adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,mNearDisData);
         mVillageNearSp.setAdapter(adapter);
 
-        mVillageNameEd  = view.findViewById(R.id.village_name_ed);
-        mVillageNameEd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAddressLayout.setVisibility(View.GONE);
-                mSearchVillageLayout.setVisibility(View.VISIBLE);
-            }
-        });
+        mVillageNameSp  = view.findViewById(R.id.village_name_sp);
+
+
 
         mSearchVillageEd = view.findViewById(R.id.search_village_ed);
         mSearchVillageEd.addTextChangedListener(new TextWatcher() {
@@ -184,6 +180,7 @@ public class AddressFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 mVillages = DBManger.getInstance(getContext()).getVillagesByKey(s.toString());
+                refreshVillageData();
                 mVillageAdapter.setData(mVillages);
             }
         });
@@ -199,6 +196,7 @@ public class AddressFragment extends Fragment {
                 mAddressLayout.setVisibility(View.VISIBLE);
                 mSearchVillageLayout.setVisibility(View.GONE);
                 mCurrentVillage = mVillages.get(position);
+                refreshMap();
             }
         });
 
@@ -207,7 +205,27 @@ public class AddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DBManger.getInstance(getContext()).setVillageToCreateReport(mCurrentVillage);
-                DBManger.getInstance(getContext()).createReport();
+                DBManger.getInstance(getContext()).createReport(new DBManger.IListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(getContext(),"生成报告成功！",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(getContext(),error,Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        });
+
+        mCancelBtn = view.findViewById(R.id.search_cancel_btn);
+        mCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAddressLayout.setVisibility(View.VISIBLE);
+                mSearchVillageLayout.setVisibility(View.GONE);
             }
         });
     };
@@ -280,6 +298,8 @@ public class AddressFragment extends Fragment {
                 String tx = opt1tx + opt2tx + opt3tx;
                 Toast.makeText(getContext(), tx, Toast.LENGTH_SHORT).show();
                 mVillageAddresEd.setText(tx);
+                mVillages = DBManger.getInstance(getContext()).getVillagesByKey(tx);
+                refreshVillageData();
             }
         })
 
@@ -364,5 +384,40 @@ public class AddressFragment extends Fragment {
             mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
         }
         return detail;
+    }
+
+    public void refreshVillageData(){
+        if (mVillages.size()>0){
+            mVillagesData.clear();
+            for (int i=0;i<mVillages.size();i++){
+                Village village = mVillages.get(i);
+                mVillagesData.add(village.getVillage_Name());
+            }
+            SpinnerAdapter adapter1 = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,mVillagesData);
+            mVillageNameSp.setAdapter(adapter1);
+            mVillageNameSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    mCurrentVillage = mVillages.get(i);
+                    refreshMap();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            mCurrentVillage = mVillages.get(0);
+            refreshMap();
+        }
+
+    }
+
+    public void refreshMap(){
+        String[] params = mCurrentVillage.getVillage_Position().split(",");
+        double lat = Double.parseDouble(params[0]);
+        double lon = Double.parseDouble(params[1]);
+        addmark(lat,lon);
     }
 }

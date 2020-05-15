@@ -96,14 +96,17 @@ public class Report implements Serializable {
         String[] reportLv2 = new String[mEvalutes.size()];
         for (int i=0;i<reportLv2.length;i++){
             Evaluate evaluate = mEvalutes.get(i);
-            reportLv2[i] = evaluate.getLevel_Third()+":"+evaluate.getWeight();
+            reportLv2[i] = evaluate.getLevel_Sec()+":"+evaluate.getLevel_Third()+" 分数："+evaluate.getWeight();
         }
         return reportLv2;
     }
 
     public String getStoreInfo(){
-        String info = store.getLevel_First()+store.getLevel_Sec()+store.getLevel_Third();
-        return info;
+        if (store!=null){
+            String info = store.getLevel_First()+store.getLevel_Sec()+store.getLevel_Third();
+            return info;
+        }
+        return "无";
     }
 
     //最终评价

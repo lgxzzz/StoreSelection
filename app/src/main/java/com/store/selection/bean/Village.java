@@ -1,9 +1,10 @@
 package com.store.selection.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Village {
+public class Village implements Serializable{
     //小区ID
     String Village_ID;
     //小区名字

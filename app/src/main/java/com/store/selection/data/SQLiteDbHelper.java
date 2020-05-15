@@ -13,7 +13,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
     //数据库名称
     public static final String DB_NAME = "Elevator.db";
     //数据库版本号
-    public static int DB_VERSION = 24;
+    public static int DB_VERSION = 31;
     //用户表
     public static final String TAB_USER = "UserInfo";
     //商店表
@@ -46,6 +46,8 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+TAB_USER);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_STORE);
         db.execSQL("DROP TABLE IF EXISTS "+TAB_EVALUTE);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_VILLAGE);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_REPORT);
         onCreate(db);
     }
 

@@ -54,14 +54,14 @@ public class ReportDescribeActivity extends Activity{
         String[] EvaluteLv1 = mReport.getEvaluteLv1();
         for (int i=0;i<EvaluteLv1.length;i++){
             TextView textView = new TextView(getApplicationContext());
-            textView.setText(EvaluteLv1[1]);
+            textView.setText(EvaluteLv1[i]);
             mLv1Layout.addView(textView);
         }
 
         String[] EvaluteLv2 = mReport.getEvaluteLv2();
         for (int i=0;i<EvaluteLv2.length;i++){
             TextView textView = new TextView(getApplicationContext());
-            textView.setText(EvaluteLv2[1]);
+            textView.setText(EvaluteLv2[i]);
             mLv2Layout.addView(textView);
         }
 
