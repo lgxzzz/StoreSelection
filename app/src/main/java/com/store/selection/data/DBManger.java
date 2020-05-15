@@ -31,6 +31,7 @@ public class DBManger {
     public DataBase mDataBase;
     public static  DBManger instance;
     public ReportMgr mReportMgr;
+    public Village mCurrentVillage;
     public static DBManger getInstance(Context mContext){
         if (instance == null){
             instance = new DBManger(mContext);
@@ -282,6 +283,31 @@ public class DBManger {
         return mUsers;
     }
 
+    //根据id获取店铺信息
+    public Store getStoreByID(String id){
+        Store store = null;
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Store where STORE_ID=?",new String[]{id});
+            while (cursor.moveToNext()){
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
+                String STORE_LEVLE_1 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_1"));
+                String STORE_LEVLE_2 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_2"));
+                String STORE_LEVLE_3 = cursor.getString(cursor.getColumnIndex("STORE_LEVLE_3"));
+                store = new Store();
+                store.setSTORE_ID(STORE_ID);
+                store.setLevel_First(STORE_LEVLE_1);
+                store.setLevel_Sec(STORE_LEVLE_2);
+                store.setLevel_Third(STORE_LEVLE_3);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return store;
+    }
+
     //获取店铺一级
     public List<Store> getStoreByLevelFirst(){
         List<Store> mStores = new ArrayList<>();
@@ -386,6 +412,32 @@ public class DBManger {
             e.printStackTrace();
         }
         return mEvalutes;
+    }
+
+    //根据id获取评价
+    public Evaluate getEvaluateByKey(String id){
+        Evaluate evaluate = null;
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Evalute where EVA_ID=?",new String[]{id});
+            while (cursor.moveToNext()){
+                String EVA_ID = cursor.getString(cursor.getColumnIndex("EVA_ID"));
+                String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
+                String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
+                String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+                evaluate = new Evaluate();
+                evaluate.setEvalute_id(EVA_ID);
+                evaluate.setWeight(WEIGHT);
+                evaluate.setLevel_First(EVA_LEVLE_1);
+                evaluate.setLevel_Sec(EVA_LEVLE_2);
+                evaluate.setLevel_Third(EVA_LEVLE_3);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return evaluate;
     }
 
     //获取所有评价标准
@@ -493,6 +545,116 @@ public class DBManger {
             e.printStackTrace();
         }
         return mVillages;
+    }
+
+    //查询小区
+    public Village getVillagesByID(String ID){
+        Village village = null;
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Village where Village_ID=?",new String[]{ID});
+            while (cursor.moveToNext()){
+                String Village_ID = cursor.getString(cursor.getColumnIndex("Village_ID"));
+                String Village_Name = cursor.getString(cursor.getColumnIndex("Village_Name"));
+                String Village_Evalute = cursor.getString(cursor.getColumnIndex("Village_Evalute"));
+                String Village_Position = cursor.getString(cursor.getColumnIndex("Village_Position"));
+                String Village_Address = cursor.getString(cursor.getColumnIndex("Village_Address"));
+
+                village = new Village();
+                village.setVillage_ID(Village_ID);
+                village.setVillage_Name(Village_Name);
+                village.setVillage_Evalute(Village_Evalute);
+                village.setVillage_Position(Village_Position);
+                village.setVillage_Address(Village_Address);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return village;
+    }
+
+    public void setVillageToCreateReport(Village village){
+        mReportMgr.setVillageToCreateReport(village);
+    }
+
+    public void createReport(){
+        Report report = mReportMgr.createReport();
+        insertReport(report);
+    }
+
+    //创建报告
+    public void insertReport(Report report){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("Report_ID",report.getReport_ID());
+            values.put("Village_ID",report.getVillage().getVillage_ID());
+            values.put("Report_Time",report.getReport_Time());
+            String evluatesStr = "";
+            List<Evaluate> evaluates = report.getmEvalutes();
+            for (int i = 0;i<evaluates.size();i++){
+                evluatesStr = evluatesStr+","+evaluates.get(i).getEvalute_id();
+            }
+            values.put("Report_Evalute",evluatesStr);
+            long code = db.insert(SQLiteDbHelper.TAB_REPORT,null,values);
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //创建报告
+    public void deleteReport(Report report){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            long code = db.delete(SQLiteDbHelper.TAB_REPORT,"Report_ID =?",new String[]{report.getReport_ID()});
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //查询所有报告
+    public List<Report> getAllReports(){
+        List<Report> mReports = new ArrayList<>();
+        try{
+
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_REPORT,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String Report_ID = cursor.getString(cursor.getColumnIndex("Report_ID"));
+                String Village_ID = cursor.getString(cursor.getColumnIndex("Village_ID"));
+                String STORE_ID = cursor.getString(cursor.getColumnIndex("STORE_ID"));
+                String Report_Time = cursor.getString(cursor.getColumnIndex("Report_Time"));
+                String Report_Evalute = cursor.getString(cursor.getColumnIndex("Report_Evalute"));
+
+                Village village = getVillagesByID(Village_ID);
+                Store store = getStoreByID(STORE_ID);
+                Report report = new Report();
+                report.setReport_ID(Report_ID);
+                report.setVillage(village);
+                report.setReport_Evalute(Report_Evalute);
+                report.setStore(store);
+                report.setmEvalutes(parseIDStrToEvalute(Report_Evalute));
+                report.setReport_Time(Report_Time);
+                mReports.add(report);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mReports;
+    }
+
+    public List<Evaluate> parseIDStrToEvalute(String str){
+        List<Evaluate> mEvalutes = new ArrayList<>();
+        String[] IDs = str.split(",");
+        for (int i =0 ;i<IDs.length;i++){
+            Evaluate evaluate = getEvaluateByKey(IDs[i]);
+            if (evaluate!=null){
+                mEvalutes.add(evaluate);
+            }
+        }
+        return mEvalutes;
     }
 
     public void initDefaultData(){

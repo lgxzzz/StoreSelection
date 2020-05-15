@@ -32,6 +32,7 @@ import com.store.selection.util.GetJsonDataUtil;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -46,7 +47,8 @@ public class StoreDescribeActivity extends Activity{
 
     Button mSureBtn;
 
-    List<Evaluate> mEvalutes;
+    List<Evaluate> mAllEvalutes;
+    public HashMap<String,Evaluate> mUserChooseEvalutes = new HashMap<>();
 
     List<String> mNearMainroadDisData;
     List<String> mVillageTypeData;
@@ -71,7 +73,7 @@ public class StoreDescribeActivity extends Activity{
     }
 
     public void init(){
-        mEvalutes = DBManger.getInstance(this).getAllEvalute();
+        mAllEvalutes = DBManger.getInstance(this).getAllEvalute();
 
 
         mStoreTypeEd = findViewById(R.id.store_type_ed);
@@ -89,13 +91,15 @@ public class StoreDescribeActivity extends Activity{
         });
 
 
-        mNearMainroadDisData = getEvaluteByKey("离小区主要出入口的距离");
+        mNearMainroadDisData = getEvaluteByLv2("离小区主要出入口的距离");
         SpinnerAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mNearMainroadDisData);
         mNearMainroadDisSp.setAdapter(adapter);
         mNearMainroadDisSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                 String lv3 = mNearMainroadDisData.get(i);
+                 Evaluate evaluate = getEvaluteByLv3(lv3);
+                mUserChooseEvalutes.put("离小区主要出入口的距离",evaluate);
             }
 
             @Override
@@ -104,13 +108,15 @@ public class StoreDescribeActivity extends Activity{
             }
         });
 
-        mVillageTypeData = getEvaluteByKey("房屋类型");
+        mVillageTypeData = getEvaluteByLv2("房屋类型");
         SpinnerAdapter adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mVillageTypeData);
         mVillageTypeSp.setAdapter(adapter1);
         mVillageTypeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                String lv3 = mVillageTypeData.get(i);
+                Evaluate evaluate = getEvaluteByLv3(lv3);
+                mUserChooseEvalutes.put("房屋类型",evaluate);
             }
 
             @Override
@@ -119,13 +125,15 @@ public class StoreDescribeActivity extends Activity{
             }
         });
 
-        mStoreAddressData = getEvaluteByKey("门店的位置");
+        mStoreAddressData = getEvaluteByLv2("门店的位置");
         SpinnerAdapter adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mStoreAddressData);
         mStoreAddressSp.setAdapter(adapter2);
         mStoreAddressSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                String lv3 = mStoreAddressData.get(i);
+                Evaluate evaluate = getEvaluteByLv3(lv3);
+                mUserChooseEvalutes.put("门店的位置",evaluate);
             }
 
             @Override
@@ -136,28 +144,38 @@ public class StoreDescribeActivity extends Activity{
 
 
 
-        mStoreVisibleData = getEvaluteByKey("门店的位置");
+        mStoreVisibleData = getEvaluteByLv2("门店可视性");
         SpinnerAdapter adapter3 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,mStoreVisibleData);
         mStoreVisibleSp.setAdapter(adapter3);
         mStoreVisibleSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                String lv3 = mStoreVisibleData.get(i);
+                Evaluate evaluate = getEvaluteByLv3(lv3);
+                mUserChooseEvalutes.put("门店可视性",evaluate);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        mSureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBManger.getInstance(getBaseContext()).mReportMgr.mUserChooseEvalutes = mUserChooseEvalutes;
+                finish();
             }
         });
 
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
     }
 
-    public List<String> getEvaluteByKey(String title_sec){
+    public List<String> getEvaluteByLv2(String title_sec){
         List<String> evaluates = new ArrayList<>();
-        for (int i =0;i<mEvalutes.size();i++){
-            Evaluate evaluate = mEvalutes.get(i);
+        for (int i =0;i<mAllEvalutes.size();i++){
+            Evaluate evaluate = mAllEvalutes.get(i);
             if (evaluate.getLevel_Sec().equals(title_sec)){
                 evaluates.add(evaluate.getLevel_Third());
             }
@@ -165,6 +183,16 @@ public class StoreDescribeActivity extends Activity{
         return evaluates;
     }
 
+    public Evaluate getEvaluteByLv3(String title_third){
+        List<String> evaluates = new ArrayList<>();
+        for (int i =0;i<mAllEvalutes.size();i++){
+            Evaluate evaluate = mAllEvalutes.get(i);
+            if (evaluate.getLevel_Third().equals(title_third)){
+               return evaluate;
+            }
+        }
+        return null;
+    }
 
     private void showPickerView() {// 弹出选择器
 

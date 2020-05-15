@@ -1,6 +1,5 @@
 package com.store.selection;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,8 +13,7 @@ import com.store.selection.data.DBManger;
 import com.store.selection.fragment.AboutFragment;
 import com.store.selection.fragment.AddressFragment;
 import com.store.selection.fragment.EvaluteFragment;
-import com.store.selection.fragment.HistoryFragment;
-import com.store.selection.fragment.ScoreFragment;
+import com.store.selection.fragment.ReportHistoryFragment;
 import com.store.selection.fragment.StoreFragment;
 import com.store.selection.util.FragmentUtils;
 
@@ -73,6 +71,10 @@ public class MainActivity extends BaseActivtiy {
                 mUserBottomMenu.setSelectedItemId(R.id.bottom_menu_address);
             }
         }
+        //fix me lgx
+        mMgrBottomMenu.setVisibility(View.GONE);
+        mUserBottomMenu.setVisibility(View.VISIBLE);
+        mUserBottomMenu.setSelectedItemId(R.id.bottom_menu_address);
     }
 
 
@@ -83,7 +85,7 @@ public class MainActivity extends BaseActivtiy {
     private void showFragment(int menu_id) {
         switch (menu_id){
             case R.id.bottom_menu_history:
-                FragmentUtils.replaceFragmentToActivity(fragmentManager, HistoryFragment.getInstance(),R.id.main_frame);
+                FragmentUtils.replaceFragmentToActivity(fragmentManager, ReportHistoryFragment.getInstance(),R.id.main_frame);
                 break;
             case R.id.bottom_menu_address:
                 FragmentUtils.replaceFragmentToActivity(fragmentManager, AddressFragment.getInstance(),R.id.main_frame);

@@ -15,7 +15,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/address_layout"
-        android:visibility="gone"
         >
 
     <LinearLayout
@@ -112,7 +111,7 @@
         android:layout_height="match_parent"
         android:id="@+id/search_village_layout"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         <LinearLayout
             android:layout_width="match_parent"

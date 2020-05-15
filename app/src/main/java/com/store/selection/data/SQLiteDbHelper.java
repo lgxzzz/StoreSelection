@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.store.selection.bean.Village;
 import com.store.selection.util.SharedPreferenceUtil;
 
 
@@ -12,7 +13,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
     //数据库名称
     public static final String DB_NAME = "Elevator.db";
     //数据库版本号
-    public static int DB_VERSION = 23;
+    public static int DB_VERSION = 24;
     //用户表
     public static final String TAB_USER = "UserInfo";
     //商店表
@@ -88,13 +89,13 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
                 "Village_Address varchar(20))");
     }
 
-    //创建小区表
+    //创建报告表
     public void createTableReport(SQLiteDatabase db){
         db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_REPORT +
-                "(Village_ID varchar(20) primary key, " +
-                "Village_Name varchar(20), " +
-                "Village_Evalute text, " +
-                "Village_Position varchar(20), " +
-                "Village_Address varchar(20))");
+                "(Report_ID varchar(20) primary key, " +
+                "Village_ID varchar(20), " +
+                "STORE_ID varchar(20), " +
+                "Report_Evalute text, " +
+                "Report_Time varchar(20))");
     }
 }

@@ -206,7 +206,8 @@ public class AddressFragment extends Fragment {
         mCreateReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                DBManger.getInstance(getContext()).setVillageToCreateReport(mCurrentVillage);
+                DBManger.getInstance(getContext()).createReport();
             }
         });
     };
