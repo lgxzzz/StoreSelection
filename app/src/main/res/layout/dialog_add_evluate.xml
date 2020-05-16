@@ -15,13 +15,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="店铺类型："
+            android:text="评价类型："
             />
         <EditText
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/add_store_lv3_ed"
+            android:id="@+id/add_eva_lv3_ed"
             />
     </LinearLayout>
     <LinearLayout
@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="10dp"
-        android:visibility="gone"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/add_store_weight_ed"
+            android:id="@+id/add_eva_weight_ed"
             android:inputType="number"
             />
     </LinearLayout>

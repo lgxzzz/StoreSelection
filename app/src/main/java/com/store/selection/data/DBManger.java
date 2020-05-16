@@ -308,6 +308,43 @@ public class DBManger {
         return store;
     }
 
+    public void insertStore(Store store,IListener listener){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Store where STORE_LEVLE_1=? and STORE_LEVLE_2=? and STORE_LEVLE_3=?",new String[]{store.getLevel_First(),store.getLevel_Sec(),store.getLevel_Third()});
+            while (cursor.moveToNext()){
+                listener.onError("已经存在该类型店铺！");
+                return;
+            }
+            Store temp = mDataBase.createStore(store.getLevel_First(),store.getLevel_Sec(),store.getLevel_Third());
+            insertStore(temp);
+            listener.onSuccess();
+            return;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        listener.onError("添加失败！");
+    }
+
+    public void insertEvalute(Evaluate evaluate,IListener listener){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Evalute where EVA_LEVLE_1=? and EVA_LEVLE_2=? and EVA_LEVLE_3=?",new String[]{evaluate.getLevel_First(),evaluate.getLevel_Sec(),evaluate.getLevel_Third()});
+            while (cursor.moveToNext()){
+                listener.onError("已经存在该评价！");
+                return;
+            }
+            Evaluate temp = mDataBase.createEvaluate(evaluate.getLevel_First(),evaluate.getLevel_Sec(),evaluate.getLevel_Third(),evaluate.getWeight()+"");
+            insertEvalute(temp);
+            listener.onSuccess();
+            return;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        listener.onError("添加失败！");
+    }
+
+
     //根据id获取店铺信息
     public Store getStoreByLv3(String lv3){
         Store store = null;

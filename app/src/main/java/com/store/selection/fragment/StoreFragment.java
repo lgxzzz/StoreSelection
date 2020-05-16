@@ -78,7 +78,7 @@ public class StoreFragment extends Fragment {
                         Intent intent = new Intent();
                         intent.setClass(getContext(),StoreThirdActivity.class);
                         Bundle b = new Bundle();
-                        b.putSerializable("store",store);
+                        b.putSerializable("lv1",store.getLevel_First());
                         b.putSerializable("lv2",title);
                         intent.putExtras(b);
                         getContext().startActivity(intent);

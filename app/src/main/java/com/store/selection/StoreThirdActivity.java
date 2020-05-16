@@ -35,6 +35,7 @@ public class StoreThirdActivity extends Activity{
 
     AddStoreDialog mDialog;
 
+    Store mStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class StoreThirdActivity extends Activity{
         mAddStoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mDialog.setStore(mStore);
                 mDialog.show();
             }
         });
@@ -65,7 +66,11 @@ public class StoreThirdActivity extends Activity{
     };
 
     public void initData() {
+        String lv1 = (String) getIntent().getExtras().getSerializable("lv1");
         String lv2 = (String) getIntent().getExtras().getSerializable("lv2");
+        mStore = new Store();
+        mStore.setLevel_First(lv1);
+        mStore.setLevel_Sec(lv2);
         List<String> mStores = DBManger.getInstance(this).getStoresByLv2(lv2);
         mAdapter = new StoreLvThirdAdapter(this, mStores);
         mListView.setAdapter(mAdapter);

@@ -90,7 +90,7 @@ public class AddressFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragement_address, container, false);
         initView(view,savedInstanceState);
-        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+
         return view;
     }
 
@@ -228,6 +228,8 @@ public class AddressFragment extends Fragment {
                 mSearchVillageLayout.setVisibility(View.GONE);
             }
         });
+
+
     };
 
     //增加图标
@@ -243,7 +245,7 @@ public class AddressFragment extends Fragment {
     }
 
     public void initData() {
-
+        mHandler.sendEmptyMessageDelayed(MSG_LOAD_DATA,500);
     }
 
     @SuppressLint("HandlerLeak")
@@ -253,7 +255,7 @@ public class AddressFragment extends Fragment {
                 case MSG_LOAD_DATA:
                     if (thread == null) {//如果已创建就不再重新创建子线程了
 
-                        Toast.makeText(getContext(), "Begin Parse Data", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "Begin Parse Data", Toast.LENGTH_SHORT).show();
                         thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -266,7 +268,7 @@ public class AddressFragment extends Fragment {
                     break;
 
                 case MSG_LOAD_SUCCESS:
-                    Toast.makeText(getContext(), "Parse Succeed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Parse Succeed", Toast.LENGTH_SHORT).show();
                     isLoaded = true;
                     break;
 

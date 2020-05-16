@@ -75,10 +75,10 @@ public class MainActivity extends BaseActivtiy {
 //        mMgrBottomMenu.setVisibility(View.VISIBLE);
 //        mUserBottomMenu.setVisibility(View.GONE);
 //        mMgrBottomMenu.setSelectedItemId(R.id.bottom_menu_store);
-
-        mMgrBottomMenu.setVisibility(View.GONE);
-        mUserBottomMenu.setVisibility(View.VISIBLE);
-        mUserBottomMenu.setSelectedItemId(R.id.bottom_menu_address);
+//
+//        mMgrBottomMenu.setVisibility(View.GONE);
+//        mUserBottomMenu.setVisibility(View.VISIBLE);
+//        mUserBottomMenu.setSelectedItemId(R.id.bottom_menu_address);
     }
 
 

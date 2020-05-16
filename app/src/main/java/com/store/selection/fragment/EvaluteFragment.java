@@ -82,7 +82,7 @@ public class EvaluteFragment extends Fragment {
                         Intent intent = new Intent();
                         intent.setClass(getContext(),EvaluteThirdActivity.class);
                         Bundle b = new Bundle();
-                        b.putSerializable("evaluate",evaluate);
+                        b.putSerializable("lv1",evaluate.getLevel_First());
                         b.putSerializable("lv2",titile);
                         intent.putExtras(b);
                         getContext().startActivity(intent);
