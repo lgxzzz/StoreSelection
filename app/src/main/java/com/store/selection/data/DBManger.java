@@ -93,6 +93,7 @@ public class DBManger {
                 values.put("USER_MAIL",user.getMail());
                 values.put("USER_TEL",user.getTelephone());
                 values.put("USER_ROLE",user.getRole());
+                values.put("USER_PASSWORD",user.getPassword());
 
                 int code = db.update(SQLiteDbHelper.TAB_USER,values,"USER_NAME =?",new String[]{user.getUserName()+""});
                 listener.onSuccess();
@@ -122,6 +123,10 @@ public class DBManger {
                 values.put("USER_ROLE",user.getRole());
                 mUser = user;
                 mUser.setUserId(userid);
+                mUser.setUserName(user.getUserName());
+                mUser.setTelephone(user.getTelephone());
+                mUser.setMail(user.getMail());
+                mUser.setRole(user.getRole());
                 long code = db.insert(SQLiteDbHelper.TAB_USER,null,values);
                 listener.onSuccess();
             }
@@ -145,9 +150,9 @@ public class DBManger {
                 values.put("USER_ID",userid);
                 values.put("USER_NAME",user.getUserName());
                 values.put("USER_PASSWORD",user.getPassword());
-                values.put("LIFT_PROCESSORPHONE",user.getTelephone());
+                values.put("USER_TEL",user.getTelephone());
                 values.put("USER_MAIL",user.getMail());
-                values.put("USER_CHARCTER",user.getRole());
+                values.put("USER_ROLE",user.getRole());
                 long code = db.insert(SQLiteDbHelper.TAB_USER,null,values);
                 listener.onSuccess();
             }
@@ -168,6 +173,46 @@ public class DBManger {
         return strRand;
     }
 
+    //获取所有小区
+    public List<Village> getAllVillges(){
+        List<Village> mVillages = new ArrayList<>();
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.query(SQLiteDbHelper.TAB_VILLAGE,null,null,null,null,null,null);
+            while (cursor.moveToNext()){
+                String Village_ID = cursor.getString(cursor.getColumnIndex("Village_ID"));
+                String Village_Name = cursor.getString(cursor.getColumnIndex("Village_Name"));
+                String Village_Evalute = cursor.getString(cursor.getColumnIndex("Village_Evalute"));
+                String Village_Position = cursor.getString(cursor.getColumnIndex("Village_Position"));
+                String Village_Address = cursor.getString(cursor.getColumnIndex("Village_Address"));
+
+
+                Village village = new Village();
+                village.setVillage_ID(Village_ID);
+                village.setVillage_Name(Village_Name);
+                village.setVillage_Evalute(Village_Evalute);
+                village.setVillage_Position(Village_Position);
+                village.setVillage_Address(Village_Address);
+                village.setmEvalutes(parseIDStrToEvalute(Village_Evalute));
+
+                mVillages.add(village);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return mVillages;
+    }
+
+
+    public void deleteVillage(Village village){
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            long code = db.delete(SQLiteDbHelper.TAB_VILLAGE,"Village_ID =?",new String[]{village.getVillage_ID()});
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     //获取所有用户
     public List<User> getAllUsers(){
@@ -179,17 +224,17 @@ public class DBManger {
                 String USER_ID = cursor.getString(cursor.getColumnIndex("USER_ID"));
                 String USER_NAME = cursor.getString(cursor.getColumnIndex("USER_NAME"));
                 String USER_PASSWORD = cursor.getString(cursor.getColumnIndex("USER_PASSWORD"));
-                String LIFT_PROCESSORPHONE = cursor.getString(cursor.getColumnIndex("LIFT_PROCESSORPHONE"));
+                String USER_TEL = cursor.getString(cursor.getColumnIndex("USER_TEL"));
                 String USER_MAIL = cursor.getString(cursor.getColumnIndex("USER_MAIL"));
-                String USER_CHARCTER = cursor.getString(cursor.getColumnIndex("USER_CHARCTER"));
+                String USER_ROLE = cursor.getString(cursor.getColumnIndex("USER_ROLE"));
 
                 User user = new User();
                 user.setUserId(USER_ID);
                 user.setUserName(USER_NAME);
                 user.setPassword(USER_PASSWORD);
-                user.setTelephone(LIFT_PROCESSORPHONE);
+                user.setTelephone(USER_TEL);
                 user.setMail(USER_MAIL);
-                user.setRole(USER_CHARCTER);
+                user.setRole(USER_ROLE);
                 mUsers.add(user);
             }
         }catch (Exception e){

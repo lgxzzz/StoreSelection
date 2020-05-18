@@ -145,6 +145,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/backgroud1"
+        android:text="人员管理"
+        android:gravity="left|center"
+        android:layout_margin="10dp"
+        android:id="@+id/add_person_btn"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroud1"
+        android:text="小区录入"
+        android:gravity="left|center"
+        android:layout_margin="10dp"
+        android:id="@+id/add_village_btn"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgroud1"
         android:text="关于"
         android:gravity="left|center"
         android:layout_margin="10dp"

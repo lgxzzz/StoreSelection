@@ -11,9 +11,9 @@ import com.store.selection.util.SharedPreferenceUtil;
 public class SQLiteDbHelper extends SQLiteOpenHelper {
 
     //数据库名称
-    public static final String DB_NAME = "Elevator.db";
+    public static final String DB_NAME = "StoreSelection.db";
     //数据库版本号
-    public static int DB_VERSION = 31;
+    public static int DB_VERSION = 35;
     //用户表
     public static final String TAB_USER = "UserInfo";
     //商店表

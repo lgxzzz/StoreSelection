@@ -22,6 +22,8 @@ public class GetJsonDataUtil {
 
         StringBuilder stringBuilder = new StringBuilder();
         try {
+            if (context==null)
+                return"";
             AssetManager assetManager = context.getAssets();
             BufferedReader bf = new BufferedReader(new InputStreamReader(
                     assetManager.open(fileName)));

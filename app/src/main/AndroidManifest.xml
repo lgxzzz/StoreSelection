@@ -42,7 +42,11 @@
         <activity android:name=".StoreThirdActivity"/>
         <activity android:name=".EvaluteThirdActivity"/>
         <activity android:name=".ReportDescribeActivity"></activity>
+        <activity android:name=".UpdateUserActivity"/>
+        <activity android:name=".PersonMgrActivity"></activity>
         <service android:name="com.amap.api.location.APSService"></service>
+        <activity android:name=".VillageMgrActivity"/>
+        <activity android:name=".AddVillageActivity"/>
         <activity android:name="com.amap.api.navi.AmapRouteActivity"
             android:theme="@android:style/Theme.NoTitleBar"
             android:configChanges="orientation|keyboardHidden|screenSize" />s

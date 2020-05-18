@@ -273,7 +273,7 @@ public class AddressFragment extends Fragment {
                     break;
 
                 case MSG_LOAD_FAILED:
-                    Toast.makeText(getContext(), "Parse Failed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Parse Failed", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
