@@ -35,6 +35,7 @@ public class ReportDescribeActivity extends Activity{
     LinearLayout mLv1Layout;
     LinearLayout mLv2Layout;
     TextView mFinalTv;
+    TextView mVillageNameTv;
 
     Report mReport;
     @Override
@@ -48,6 +49,7 @@ public class ReportDescribeActivity extends Activity{
         mLv1Layout = findViewById(R.id.report_lv1_layout);
         mLv2Layout = findViewById(R.id.report_lv2_layout);
         mFinalTv = findViewById(R.id.report_final_tv);
+        mVillageNameTv = findViewById(R.id.village_name_tv);
 
         mReport =  (Report) getIntent().getExtras().getSerializable("report");
 
@@ -64,7 +66,7 @@ public class ReportDescribeActivity extends Activity{
             textView.setText(EvaluteLv2[i]);
             mLv2Layout.addView(textView);
         }
-
+        mVillageNameTv.setText(mReport.getVillage().getVillage_Name());
         mFinalTv.setText(mReport.getFinal());
     }
 

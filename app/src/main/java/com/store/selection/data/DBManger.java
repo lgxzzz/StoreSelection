@@ -573,7 +573,7 @@ public class DBManger {
         return mEvalutes;
     }
 
-    //根据lv2获取店铺信息
+    //根据lv2获取评价信息
     public List<String> getEvluatesByLv2(String lv2){
         List<String> mStores = new ArrayList<>();
         try{
@@ -593,6 +593,33 @@ public class DBManger {
         }
         return mStores;
     }
+
+    //根据id获取评价
+    public Evaluate getEvaluateByLv3(String lv3){
+        Evaluate evaluate = null;
+        try{
+            SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select * from Evalute where EVA_LEVLE_3=?",new String[]{lv3});
+            while (cursor.moveToNext()){
+                String EVA_ID = cursor.getString(cursor.getColumnIndex("EVA_ID"));
+                String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
+                String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
+                String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+                evaluate = new Evaluate();
+                evaluate.setEvalute_id(EVA_ID);
+                evaluate.setWeight(WEIGHT);
+                evaluate.setLevel_First(EVA_LEVLE_1);
+                evaluate.setLevel_Sec(EVA_LEVLE_2);
+                evaluate.setLevel_Third(EVA_LEVLE_3);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return evaluate;
+    }
+
 
     //根据id获取评价
     public Evaluate getEvaluateByKey(String id){

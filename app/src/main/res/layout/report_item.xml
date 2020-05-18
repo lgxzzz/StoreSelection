@@ -10,6 +10,7 @@
     android:background="@drawable/backgroud1"
     android:layout_gravity="center"
     android:gravity="center"
+    android:descendantFocusability="blocksDescendants"
     >
     <LinearLayout
         android:layout_width="0dp"
@@ -51,4 +52,11 @@
         android:text="删除"
         android:id="@+id/report_delete_btn"
         />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/report_select_cb"
+        android:visibility="gone"
+        >
+    </CheckBox>
 </LinearLayout>

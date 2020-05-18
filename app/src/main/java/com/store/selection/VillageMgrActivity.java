@@ -34,6 +34,11 @@ public class VillageMgrActivity extends Activity {
 
         mAddBtn = findViewById(R.id.village_add_btn);
         mPersonListview = findViewById(R.id.village_listview);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         mAllVillage = DBManger.getInstance(this).getAllVillges();
 

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +29,22 @@ public class ReportAdapter extends BaseAdapter {
     Context mContext;
     List<Report> mReports = new ArrayList<>();
 
+    private OnShowItemClickListener onShowItemClickListener;
+
+    boolean isSelect = false;
 
     public ReportAdapter(Context mContext, List<Report> mReports){
         this.mContext = mContext;
         this.mReports = mReports;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+        notifyDataSetChanged();
+    }
+
+    public boolean isSelect() {
+        return isSelect;
     }
 
     @Override
@@ -60,6 +74,7 @@ public class ReportAdapter extends BaseAdapter {
             holer.mStoreInfoTv = (TextView) view.findViewById(R.id.store_name);
             holer.mReportTimeTv = (TextView) view.findViewById(R.id.report_time_tv);
             holer.mDeleteBtn = (Button) view.findViewById(R.id.report_delete_btn);
+            holer.mSelectCB = (CheckBox) view.findViewById(R.id.report_select_cb);
             view.setTag(holer);
         }else{
             holer = (ReportAdapter.ViewHoler) view.getTag();
@@ -73,20 +88,49 @@ public class ReportAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Toast.makeText(mContext,"删除成功",Toast.LENGTH_LONG).show();
                 DBManger.getInstance(mContext).deleteReport(report);
+                mReports.remove(report);
+                notifyDataSetChanged();
             }
         });
-        view.setOnClickListener(new View.OnClickListener() {
+        if (isSelect){
+            holer.mSelectCB.setVisibility(View.VISIBLE);
+            holer.mDeleteBtn.setVisibility(View.GONE);
+        }else {
+            holer.mSelectCB.setVisibility(View.GONE);
+            holer.mDeleteBtn.setVisibility(View.VISIBLE);
+        }
+        holer.mSelectCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, ReportDescribeActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable("report",report);
-                intent.putExtras(b);
-                mContext.startActivity(intent);
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 回调方法，将Item加入已选
+                if (onShowItemClickListener!=null)
+                onShowItemClickListener.onShowItemClick(report);
             }
         });
+
+
+
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(mContext, ReportDescribeActivity.class);
+//                Bundle b = new Bundle();
+//                b.putSerializable("report",report);
+//                intent.putExtras(b);
+//                mContext.startActivity(intent);
+//            }
+//        });
         return view;
+    }
+
+    public interface OnShowItemClickListener {
+        public void onShowItemClick(Report bean);
+    }
+
+    public void setOnShowItemClickListener(OnShowItemClickListener onShowItemClickListener) {
+        this.onShowItemClickListener = onShowItemClickListener;
     }
 
     class ViewHoler{
@@ -95,5 +139,6 @@ public class ReportAdapter extends BaseAdapter {
         TextView mStoreInfoTv;
         TextView mReportTimeTv;
         Button mDeleteBtn;
+        CheckBox mSelectCB;
     }
 }

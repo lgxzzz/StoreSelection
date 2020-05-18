@@ -23,6 +23,8 @@ public class Report implements Serializable {
     //店铺信息
     Store  store;
 
+    private boolean isChecked; // 是否选中CheckBox
+
     public String getReport_ID() {
         return Report_ID;
     }
@@ -57,6 +59,14 @@ public class Report implements Serializable {
 
     public List<Evaluate> getmEvalutes() {
         return mEvalutes;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public void setmEvalutes(List<Evaluate> mEvalutes) {
