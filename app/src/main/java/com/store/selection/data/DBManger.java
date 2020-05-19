@@ -379,7 +379,7 @@ public class DBManger {
                 listener.onError("已经存在该评价！");
                 return;
             }
-            Evaluate temp = mDataBase.createEvaluate(evaluate.getLevel_First(),evaluate.getLevel_Sec(),evaluate.getLevel_Third(),evaluate.getWeight()+"");
+            Evaluate temp = mDataBase.createEvaluate(evaluate.getLevel_First(),evaluate.getLevel_Sec(),evaluate.getLevel_Third(),evaluate.getWeight()+"",evaluate.getLv1_weight(),evaluate.getLv2_weight());
             insertEvalute(temp);
             listener.onSuccess();
             return;
@@ -522,16 +522,19 @@ public class DBManger {
         List<Evaluate> mEvalutes = new ArrayList<>();
         HashMap<String, List<Evaluate>> mTempMap = new HashMap<>();
         try{
-
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
             Cursor cursor = db.query(SQLiteDbHelper.TAB_EVALUTE,null,null,null,null,null,null);
             while (cursor.moveToNext()){
                 String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String LV_2_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_2_WEIGHT"));
+                String LV_1_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_1_WEIGHT"));
                 String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
                 String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
                 String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
                 Evaluate evaluate = new Evaluate();
                 evaluate.setWeight(WEIGHT);
+                evaluate.setLv1_weight(LV_1_WEIGHT);
+                evaluate.setLv2_weight(LV_2_WEIGHT);
                 evaluate.setLevel_First(EVA_LEVLE_1);
                 evaluate.setLevel_Sec(EVA_LEVLE_2);
                 evaluate.setLevel_Third(EVA_LEVLE_3);
@@ -554,9 +557,11 @@ public class DBManger {
                 List<Evaluate> temps= (List<Evaluate>)entry.getValue();
                 Evaluate evaluate = new Evaluate();
                 evaluate.setLevel_First(lv1);
+
                 for (int i=0;i<temps.size();i++){
                     Evaluate temp = temps.get(i);
-
+                    evaluate.setLv1_weight(temp.getLv1_weight());
+                    evaluate.setLv2_weight(temp.getLv2_weight());
                     if (!evaluate.getLevelSecTitle().contains(temp.getLevel_Sec()))
                         evaluate.getLevelSecTitle().add(temp.getLevel_Sec());
                     if (!evaluate.getLevelThirdTitle().contains(temp.getLevel_Third()))
@@ -606,9 +611,15 @@ public class DBManger {
                 String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
                 String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
                 String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
+
+                String LV_2_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_2_WEIGHT"));
+                String LV_1_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_1_WEIGHT"));
+
                 evaluate = new Evaluate();
                 evaluate.setEvalute_id(EVA_ID);
                 evaluate.setWeight(WEIGHT);
+                evaluate.setLv1_weight(LV_1_WEIGHT);
+                evaluate.setLv2_weight(LV_2_WEIGHT);
                 evaluate.setLevel_First(EVA_LEVLE_1);
                 evaluate.setLevel_Sec(EVA_LEVLE_2);
                 evaluate.setLevel_Third(EVA_LEVLE_3);
@@ -630,12 +641,16 @@ public class DBManger {
             while (cursor.moveToNext()){
                 String EVA_ID = cursor.getString(cursor.getColumnIndex("EVA_ID"));
                 String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String LV_2_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_2_WEIGHT"));
+                String LV_1_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_1_WEIGHT"));
                 String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
                 String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
                 String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
                 evaluate = new Evaluate();
                 evaluate.setEvalute_id(EVA_ID);
                 evaluate.setWeight(WEIGHT);
+                evaluate.setLv1_weight(LV_1_WEIGHT);
+                evaluate.setLv2_weight(LV_2_WEIGHT);
                 evaluate.setLevel_First(EVA_LEVLE_1);
                 evaluate.setLevel_Sec(EVA_LEVLE_2);
                 evaluate.setLevel_Third(EVA_LEVLE_3);
@@ -658,11 +673,15 @@ public class DBManger {
             while (cursor.moveToNext()){
                 String EVA_ID = cursor.getString(cursor.getColumnIndex("EVA_ID"));
                 String WEIGHT = cursor.getString(cursor.getColumnIndex("WEIGHT"));
+                String LV_2_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_2_WEIGHT"));
+                String LV_1_WEIGHT = cursor.getString(cursor.getColumnIndex("LV_1_WEIGHT"));
                 String EVA_LEVLE_1 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_1"));
                 String EVA_LEVLE_2 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_2"));
                 String EVA_LEVLE_3 = cursor.getString(cursor.getColumnIndex("EVA_LEVLE_3"));
                 Evaluate evaluate = new Evaluate();
                 evaluate.setWeight(WEIGHT);
+                evaluate.setLv1_weight(LV_1_WEIGHT);
+                evaluate.setLv2_weight(LV_2_WEIGHT);
                 evaluate.setEvalute_id(EVA_ID);
                 evaluate.setLevel_First(EVA_LEVLE_1);
                 evaluate.setLevel_Sec(EVA_LEVLE_2);
@@ -698,6 +717,8 @@ public class DBManger {
             ContentValues values = new ContentValues();
             values.put("EVA_ID",evaluate.getEvalute_id());
             values.put("WEIGHT",evaluate.getWeight());
+            values.put("LV_2_WEIGHT",evaluate.getLv2_weight());
+            values.put("LV_1_WEIGHT",evaluate.getLv1_weight());
             values.put("EVA_LEVLE_1",evaluate.getLevel_First());
             values.put("EVA_LEVLE_2",evaluate.getLevel_Sec());
             values.put("EVA_LEVLE_3",evaluate.getLevel_Third());

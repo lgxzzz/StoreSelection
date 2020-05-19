@@ -122,27 +122,21 @@ public class Report implements Serializable {
     //最终评价
     public String getFinal(){
         String finaltv = "无";
-        int person_point = 0;
-        int evirment_point = 0;
-        int traffic_point = 0;
+        //计算得分
+        float final_point = 0;
         for (int i=0;i<mEvalutes.size();i++){
             Evaluate evaluate = mEvalutes.get(i);
-            if (evaluate.getLevel_First().equals("人流因素")){
-                person_point = person_point+ Integer.parseInt(evaluate.getWeight());
-            }else  if (evaluate.getLevel_First().equals("环境因素")){
-                evirment_point = evirment_point+ Integer.parseInt(evaluate.getWeight());
-            }else  if (evaluate.getLevel_First().equals("交通因素")){
-                traffic_point = traffic_point+ Integer.parseInt(evaluate.getWeight());
-            }
+            float lv1weight = Float.parseFloat(evaluate.getLv1_weight())/100;
+            float lv2weight = Float.parseFloat(evaluate.getLv2_weight())/100;
+            float point = Float.parseFloat(evaluate.getWeight());
+            final_point = final_point+ point*lv1weight*lv2weight;
         }
-
-        int count = person_point+evirment_point+traffic_point;
-        if (count<5){
-            finaltv = "不推荐";
-        }else if(count >10 && count<15){
-            finaltv = "良好";
+        if (final_point<2){
+            finaltv = "得分："+final_point+"  不推荐";
+        }else if(final_point >2 && final_point<4){
+            finaltv =  "得分："+final_point+"  良好";
         }else {
-            finaltv = "推荐";
+            finaltv =  "得分："+final_point+"  推荐";
         }
         return finaltv;
     }

@@ -34,8 +34,10 @@ public class AddEvaluteDialog extends Dialog {
     private Context context;
     private Button mAddBtn;
     private Button mCanceleBtn;
-    private EditText mStoreLv3Ed;
-    private EditText mStoreLv3WeightEd;
+    private EditText mEvaLv1WeightEd;
+    private EditText mEvaLv2WeightEd;
+    private EditText mEvaLv3WeightEd;
+    private EditText mEvaLv3Ed;
     Evaluate mEvaluate;
 
     public AddEvaluteDialog(Context context, int layoutid, boolean isCancelable, boolean isBackCancelable) {
@@ -61,17 +63,23 @@ public class AddEvaluteDialog extends Dialog {
 
     public void setEvaluate(Evaluate evaluate){
         this.mEvaluate = evaluate;
-        mStoreLv3Ed = view.findViewById(R.id.add_eva_lv3_ed);
-        mStoreLv3WeightEd = view.findViewById(R.id.add_eva_weight_ed);
+        mEvaLv1WeightEd = view.findViewById(R.id.add_eva_lv1_weight_ed);
+        mEvaLv2WeightEd = view.findViewById(R.id.add_eva_lv2_weight_ed);
+        mEvaLv3Ed = view.findViewById(R.id.add_eva_lv3_ed);
+        mEvaLv3WeightEd = view.findViewById(R.id.add_eva_lv3_weight_ed);
         mAddBtn = view.findViewById(R.id.add_sure_btn);
         mCanceleBtn = view.findViewById(R.id.add_cancel_btn);
 
+        mEvaLv1WeightEd.setText(mEvaluate.getLv1_weight());
+        mEvaLv2WeightEd.setText(mEvaluate.getLv2_weight());
 
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newLv3 = mStoreLv3Ed.getEditableText().toString();
-                String weight = mStoreLv3WeightEd.getEditableText().toString();
+                String newLv1Weight = mEvaLv3Ed.getEditableText().toString();
+                String newLv2Weight = mEvaLv3Ed.getEditableText().toString();
+                String newLv3 = mEvaLv3Ed.getEditableText().toString();
+                String weight = mEvaLv3WeightEd.getEditableText().toString();
                 if (newLv3.length()==0){
                     Toast.makeText(getContext(),"店铺名不能为空！",Toast.LENGTH_LONG).show();
                     return;
@@ -82,6 +90,8 @@ public class AddEvaluteDialog extends Dialog {
                 }
                 mEvaluate.setLevel_Third(newLv3);
                 mEvaluate.setWeight(weight);
+                mEvaluate.setLv1_weight(newLv1Weight);
+                mEvaluate.setLv2_weight(newLv2Weight);
                 DBManger.getInstance(getContext()).insertEvalute(mEvaluate, new DBManger.IListener() {
                     @Override
                     public void onSuccess() {

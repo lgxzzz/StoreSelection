@@ -61,9 +61,12 @@ public class EvaluteThirdActivity extends Activity{
     public void initData() {
         String lv1 = (String) getIntent().getExtras().getSerializable("lv1");
         String lv2 = (String) getIntent().getExtras().getSerializable("lv2");
+        Evaluate evaluate = (Evaluate) getIntent().getExtras().getSerializable("evaluate");
         mEvalute = new Evaluate();
         mEvalute.setLevel_First(lv1);
         mEvalute.setLevel_Sec(lv2);
+        mEvalute.setLv1_weight(evaluate.getLv1_weight());
+        mEvalute.setLv2_weight(evaluate.getLv2_weight());
         List<String> mEvalutes = DBManger.getInstance(this).getEvluatesByLv2(lv2);
         mAdapter = new StoreLvThirdAdapter(this, mEvalutes);
         mListView.setAdapter(mAdapter);

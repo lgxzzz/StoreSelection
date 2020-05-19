@@ -13,7 +13,7 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
     //数据库名称
     public static final String DB_NAME = "StoreSelection.db";
     //数据库版本号
-    public static int DB_VERSION = 35;
+    public static int DB_VERSION = 37;
     //用户表
     public static final String TAB_USER = "UserInfo";
     //商店表
@@ -76,6 +76,8 @@ public class SQLiteDbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS "+TAB_EVALUTE +
                 "(EVA_ID varchar(20) primary key, " +
                 "WEIGHT varchar(20), " +
+                "LV_2_WEIGHT varchar(20), " +
+                "LV_1_WEIGHT varchar(20), " +
                 "EVA_LEVLE_1 varchar(20), " +
                 "EVA_LEVLE_2 varchar(20), " +
                 "EVA_LEVLE_3 varchar(20))");
