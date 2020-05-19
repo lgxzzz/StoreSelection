@@ -235,7 +235,7 @@ public class AddVillageActivity extends Activity {
                 mCurrentVillage.setVillage_Position(s.toString());
             }
         });
-        mVillagePositonEd.setText("116.472995,39.993743");
+        mVillagePositonEd.setText("39.993743,116.472995");
 
         mVillageNameEd.addTextChangedListener(new TextWatcher() {
             @Override
